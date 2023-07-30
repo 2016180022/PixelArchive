@@ -5,6 +5,7 @@ using UnityEngine;
 public class PlayerAction : MonoBehaviour
 {
     public float speed;
+    public GameManager gManager;
 
     Rigidbody2D rigid;
     Animator anim;
@@ -23,6 +24,11 @@ public class PlayerAction : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        //scanObj 검사
+        if (Input.GetButtonDown("Jump") && scanObj != null) gManager.setText(scanObj);
+
+        if (gManager.isDialogActive) return;
+
         // h, v 방향 움직임 설정
         h = Input.GetAxisRaw("Horizontal");
         v = Input.GetAxisRaw("Vertical");
@@ -54,8 +60,6 @@ public class PlayerAction : MonoBehaviour
         else if (hDown && v == -1) dirVec = Vector3.left;
         else if (hDown && v == 1) dirVec = Vector3.right;
 
-        //scanObj 검사
-        if (Input.GetButtonDown("Jump") && scanObj != null) Debug.Log("이 녀석은" + scanObj.name + "입니다.");
     }
 
     void FixedUpdate()
