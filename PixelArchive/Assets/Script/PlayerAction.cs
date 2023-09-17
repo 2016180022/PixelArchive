@@ -17,19 +17,31 @@ public class PlayerAction : MonoBehaviour
     Vector3 dirVec;
     GameObject scanObj;
     
-    void Start()
-    {
+    void Start() {
         rigid = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();
     }
 
     // Update is called once per frame
-    void Update()
-    {
+    void Update() {
         //scanObj 검사
         if (Input.GetButtonDown("Jump") && scanObj != null) gManager.setText(scanObj);
 
         if (gManager.isDialogActive) return;
+
+        if (inputVec.x != 0) {
+            if (inputVec.x != anim.GetInteger("horizonAxisRaw")) anim.SetBool("isDirectionChanged", true);
+            else anim.SetBool("isDirectionChanged", false);
+            anim.SetInteger("horizonAxisRaw", (int)inputVec.x);
+        }
+        else anim.SetInteger("horizonAxisRaw", 0);
+
+        if (inputVec.y != 0)  {
+            if (inputVec.y != anim.GetInteger("vertAxisRaw")) anim.SetBool("isDirectionChanged", true);
+            else anim.SetBool("isDirectionChanged", false);
+            anim.SetInteger("vertAxisRaw", (int)inputVec.y);
+        }
+        else anim.SetInteger("vertAxisRaw", 0);
 
         //인풋시스템 리워크로 주석 처리
         /*
@@ -67,8 +79,7 @@ public class PlayerAction : MonoBehaviour
 
     }
 
-    void FixedUpdate()
-    {
+    void FixedUpdate() {
         //인풋시스템 리워크로 주석 처리
         /*
         //h, v 움직임 따로 적용
@@ -87,8 +98,13 @@ public class PlayerAction : MonoBehaviour
     }
 
     //Renewal Input System
-    void OnMove(InputValue value)
-    {
+    void OnMove(InputValue value) {
         inputVec = value.Get<Vector2>();
+    }
+
+    void LateUpdate() {
+        if (inputVec.x != 0) {
+            
+        }
     }
 }
