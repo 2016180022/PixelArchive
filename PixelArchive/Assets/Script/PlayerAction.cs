@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -8,18 +9,19 @@ public class PlayerAction : MonoBehaviour
     public Vector2 inputVec;
     public float speed;
     public GameManager gManager;
+    public GameObject Bullet;
+    //임시로 true 설정
+    public bool isBattle = true;
 
     Rigidbody2D rigid;
     Animator anim;
-    float h;
-    float v;
-    bool isHorizontalMove;
-    Vector3 dirVec;
     GameObject scanObj;
+    Camera playerCamera;
     
     void Start() {
         rigid = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();
+        playerCamera = GameObject.Find("Main Camera").GetComponent<Camera>();
     }
 
     // Update is called once per frame
@@ -29,6 +31,19 @@ public class PlayerAction : MonoBehaviour
 
         if (gManager.isDialogActive) return;
 
+        moveUpdate();
+
+        /*
+        //방향 레이 동기화
+        if (vDown && v == 1) dirVec = Vector3.up;
+        else if (vDown && v == -1) dirVec = Vector3.down;
+        else if (hDown && v == -1) dirVec = Vector3.left;
+        else if (hDown && v == 1) dirVec = Vector3.right;
+        */
+
+    }
+
+    private void moveUpdate() {
         if (inputVec.x != 0) {
             if (inputVec.x != anim.GetInteger("horizonAxisRaw")) anim.SetBool("isDirectionChanged", true);
             else anim.SetBool("isDirectionChanged", false);
@@ -42,41 +57,6 @@ public class PlayerAction : MonoBehaviour
             anim.SetInteger("vertAxisRaw", (int)inputVec.y);
         }
         else anim.SetInteger("vertAxisRaw", 0);
-
-        //인풋시스템 리워크로 주석 처리
-        /*
-        // h, v 방향 움직임 설정
-        h = Input.GetAxisRaw("Horizontal");
-        v = Input.GetAxisRaw("Vertical");
-
-        // 버튼 다운/업 정보 동기화
-        bool hDown = Input.GetButtonDown("Horizontal");
-        bool hUp = Input.GetButtonUp("Horizontal");
-        bool vDown = Input.GetButtonDown("Vertical");
-        bool vUp = Input.GetButtonUp("Vertical");
-
-        //h, v 방향 bool 인자까지 동기화
-        if (hDown) isHorizontalMove = true;
-        else if (vDown) isHorizontalMove = false;
-        else if (hUp || vUp) isHorizontalMove = h != 0;
-
-        if (anim.GetInteger("horizonAxisRaw") != h) {
-            anim.SetBool("isDirectionChanged", true);
-            anim.SetInteger("horizonAxisRaw", (int)h);
-            }
-        else if (anim.GetInteger("vertAxisRaw") != v) {
-            anim.SetBool("isDirectionChanged", true);         
-            anim.SetInteger("vertAxisRaw", (int)v);
-        }
-        else anim.SetBool("isDirectionChanged", false);
-
-        //방향 레이 동기화
-        if (vDown && v == 1) dirVec = Vector3.up;
-        else if (vDown && v == -1) dirVec = Vector3.down;
-        else if (hDown && v == -1) dirVec = Vector3.left;
-        else if (hDown && v == 1) dirVec = Vector3.right;
-        */
-
     }
 
     void FixedUpdate() {
@@ -102,9 +82,25 @@ public class PlayerAction : MonoBehaviour
         inputVec = value.Get<Vector2>();
     }
 
-    void LateUpdate() {
-        if (inputVec.x != 0) {
-            
-        }
+    void OnFire() {
+        GameObject bullet = Instantiate(Bullet, transform.position, transform.rotation);
+        Rigidbody2D bulletRigid = bullet.GetComponent<Rigidbody2D>();
+        Vector2 mousePos = playerCamera.ScreenToWorldPoint(Input.mousePosition);
+        Vector2 bulletDir;
+        bulletDir.x = mousePos.x - rigid.position.x;
+        bulletDir.y = mousePos.y - rigid.position.y;
+
+        //총알 등속운동 만들기
+        // if (Math.Abs(bulletDir.x) >= Math.Abs(bulletDir.y)) {
+        //     bulletDir.x = bulletDir.x / Math.Abs(bulletDir.y);
+        //     bulletDir.y = bulletDir.y / Math.Abs(bulletDir.y);
+        // }
+        // else {
+        //     bulletDir.x = bulletDir.x / Math.Abs(bulletDir.x);
+        //     bulletDir.y = bulletDir.y / Math.Abs(bulletDir.x);
+        // }
+
+        bulletRigid.AddForce(bulletDir * 3, ForceMode2D.Impulse);
     }
+
 }
