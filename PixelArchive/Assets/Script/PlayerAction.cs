@@ -1,9 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class PlayerAction : MonoBehaviour
 {
+    public Vector2 inputVec;
     public float speed;
     public GameManager gManager;
 
@@ -29,6 +31,8 @@ public class PlayerAction : MonoBehaviour
 
         if (gManager.isDialogActive) return;
 
+        //인풋시스템 리워크로 주석 처리
+        /*
         // h, v 방향 움직임 설정
         h = Input.GetAxisRaw("Horizontal");
         v = Input.GetAxisRaw("Vertical");
@@ -59,11 +63,14 @@ public class PlayerAction : MonoBehaviour
         else if (vDown && v == -1) dirVec = Vector3.down;
         else if (hDown && v == -1) dirVec = Vector3.left;
         else if (hDown && v == 1) dirVec = Vector3.right;
+        */
 
     }
 
     void FixedUpdate()
     {
+        //인풋시스템 리워크로 주석 처리
+        /*
         //h, v 움직임 따로 적용
         Vector2 moveVector = isHorizontalMove ? new Vector2(h, 0) : new Vector2(0, v);
         rigid.velocity = moveVector * speed;
@@ -74,5 +81,14 @@ public class PlayerAction : MonoBehaviour
 
         if (rayHit.collider != null) scanObj = rayHit.collider.gameObject;
         else scanObj = null;
+        */
+        Vector2 moveVector = inputVec * speed * Time.fixedDeltaTime;
+        rigid.MovePosition(rigid.position + moveVector);
+    }
+
+    //Renewal Input System
+    void OnMove(InputValue value)
+    {
+        inputVec = value.Get<Vector2>();
     }
 }
