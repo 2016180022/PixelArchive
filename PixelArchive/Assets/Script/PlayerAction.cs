@@ -90,17 +90,7 @@ public class PlayerAction : MonoBehaviour
         bulletDir.x = mousePos.x - rigid.position.x;
         bulletDir.y = mousePos.y - rigid.position.y;
 
-        //총알 등속운동 만들기
-        // if (Math.Abs(bulletDir.x) >= Math.Abs(bulletDir.y)) {
-        //     bulletDir.x = bulletDir.x / Math.Abs(bulletDir.y);
-        //     bulletDir.y = bulletDir.y / Math.Abs(bulletDir.y);
-        // }
-        // else {
-        //     bulletDir.x = bulletDir.x / Math.Abs(bulletDir.x);
-        //     bulletDir.y = bulletDir.y / Math.Abs(bulletDir.x);
-        // }
-
-        bulletRigid.AddForce(bulletDir * 3, ForceMode2D.Impulse);
+        bulletRigid.AddForce(bulletDir.normalized * 10, ForceMode2D.Impulse);
     }
 
 }
