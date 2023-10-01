@@ -9,6 +9,7 @@ TagManager:
   - Obj
   - NPC
   - BorderObj
+  - Enemy
   layers:
   - Default
   - TransparentFX
