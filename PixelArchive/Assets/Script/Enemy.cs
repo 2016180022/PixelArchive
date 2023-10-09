@@ -4,33 +4,84 @@ using UnityEngine;
 
 public class Enemy : MonoBehaviour
 {
+    public string enemyType;
     public float speed;
-    public float health = 1;
-    public Rigidbody2D target;
+    public float health;
+    public float attackRange;
+    public float curShotDelay;
+    public float maxShotDelay;
+    public GameObject Bullet;
 
     bool isLive = true;
     Rigidbody2D rigidB;
+    Rigidbody2D target;
     SpriteRenderer spriteR;
+
     void Awake()
     {
         rigidB = GetComponent<Rigidbody2D>();
         spriteR = GetComponent<SpriteRenderer>();
     }
 
-    void FixedUpdate() {
+    private void Start() {
+        target = GameManager.instance.player.GetComponent<Rigidbody2D>();
+    }
 
+    void FixedUpdate() {
         if (!isLive) return;
 
-        Vector2 dirVec = target.position - rigidB.position;
-        Vector2 nextVec = dirVec.normalized * speed * Time.fixedDeltaTime;
-        rigidB.MovePosition(rigidB.position + nextVec);
-        rigidB.velocity = Vector2.zero;
+        float targetDis = Vector2.Distance(target.position, rigidB.position);
+
+        if (targetDis < attackRange) {
+            FireAndReload();
+        }
+        else {
+            Vector2 dirVec = target.position - rigidB.position;
+            Vector2 nextVec = dirVec.normalized * speed * Time.fixedDeltaTime;
+            rigidB.MovePosition(rigidB.position + nextVec);
+            rigidB.velocity = Vector2.zero;
+        }
+
     }
 
     void LateUpdate() {
          if (!isLive) return;
 
          spriteR.flipX = target.position.x < rigidB.position.x;
+    }
+
+    private void FireAndReload() {
+        AutoFire();
+        Reload();
+    }
+    private void AutoFire() {
+        if (curShotDelay < maxShotDelay) return;
+
+        if (enemyType == "Single") {
+            GameObject bullet = Instantiate(Bullet, transform.position, transform.rotation);
+            Rigidbody2D bulletRigid = bullet.GetComponent<Rigidbody2D>();
+            Vector2 dirVec = target.position - rigidB.position;
+            bulletRigid.AddForce(dirVec.normalized * 5, ForceMode2D.Impulse);
+        }
+        else if (enemyType == "3Burst") {
+            for (int i = 0; i < 3; i++) {
+                GameObject bullet = Instantiate(Bullet, transform.position, transform.rotation);
+                Rigidbody2D bulletRigid = bullet.GetComponent<Rigidbody2D>();
+                Vector2 dirVec = target.position - rigidB.position;
+                Vector2 randomVec = new Vector2(Random.Range(-0.5f, 0.5f), Random.Range(-0.5f, 0.5f));
+
+                dirVec += randomVec;
+
+                bulletRigid.AddForce(dirVec.normalized * 5, ForceMode2D.Impulse);
+            }
+            
+        }
+
+        curShotDelay = 0;
+    }
+
+    private void Reload() {
+        curShotDelay += Time.deltaTime;
     }
 
     private void OnTriggerEnter2D(Collider2D other) {
@@ -45,7 +96,11 @@ public class Enemy : MonoBehaviour
         }
     }
 
-    void Dead() {
+    private void Dead() {
         gameObject.SetActive(false);
+    }
+
+    private void OnEnable() {
+        // target = GameManager.instance.player.GetComponent<Rigidbody2D>();
     }
 }

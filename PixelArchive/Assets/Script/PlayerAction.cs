@@ -18,7 +18,7 @@ public class PlayerAction : MonoBehaviour
     GameObject scanObj;
     Camera playerCamera;
     
-    void Start() {
+    void Awake() {
         rigid = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();
         playerCamera = GameObject.Find("Main Camera").GetComponent<Camera>();

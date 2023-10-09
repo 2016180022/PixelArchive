@@ -14,6 +14,12 @@ public class GameManager : MonoBehaviour
     public Image charSprite;
     public int dialogIndex;
 
+    public PlayerAction player;
+    public static GameManager instance;
+
+    private void Awake() {
+        instance = this;
+    }
 
     public void setText(GameObject scanobj)
     {
