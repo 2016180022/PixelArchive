@@ -90,13 +90,9 @@ public class PlayerAction : MonoBehaviour
         bulletDir.x = mousePos.x - rigid.position.x;
         bulletDir.y = mousePos.y - rigid.position.y;
 
-        //불릿 회전
-        // Vector3 tempVec = new Vector3(mousePos.x, mousePos.y, bullet.transform.position.z);
-        // float bulletRotation = Quaternion.FromToRotation(bullet.transform.position, tempVec).eulerAngles.z;
-        // bullet.transform.Rotate(0, 0, bulletRotation, Space.Self);
         float angle = Mathf.Atan2(mousePos.y - bullet.transform.position.y, mousePos.x - bullet.transform.position.x) * Mathf.Rad2Deg;
         bullet.transform.rotation = Quaternion.AngleAxis(angle - 90, Vector3.forward);
-        Debug.Log(angle);
+        // Debug.Log(angle);
 
         bulletRigid.AddForce(bulletDir.normalized * 10, ForceMode2D.Impulse);
     }
