@@ -1,8 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <CharacterInfo>
   <Character>
-    <name>tempName</name>
-    <lv>5</lv>
-    <coin>10</coin>
+    <Name>tempName</Name>
+    <Lv>5</Lv>
+    <Coin>10</Coin>
   </Character>
 </CharacterInfo>
