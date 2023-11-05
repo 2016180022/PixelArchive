@@ -27,7 +27,7 @@ public class PlayerAction : MonoBehaviour
     // Update is called once per frame
     void Update() {
         //scanObj 검사
-        if (Input.GetButtonDown("Jump") && scanObj != null) gManager.setText(scanObj);
+        // if (Input.GetButtonDown("Jump") && scanObj != null) gManager.setText(scanObj);
 
         if (gManager.isDialogActive) return;
 
@@ -95,6 +95,11 @@ public class PlayerAction : MonoBehaviour
         // Debug.Log(angle);
 
         bulletRigid.AddForce(bulletDir.normalized * 10, ForceMode2D.Impulse);
+    }
+
+    void OnJump() {
+        Debug.Log("Jump");
+        gManager.addTile();
     }
 
 }

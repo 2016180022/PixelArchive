@@ -463,7 +463,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &490985534
 Transform:
   m_ObjectHideFlags: 0
@@ -496,25 +496,7 @@ CompositeCollider2D:
   m_GeometryType: 0
   m_GenerationType: 0
   m_EdgeRadius: 0
-  m_ColliderPaths:
-  - m_Collider: {fileID: 490985536}
-    m_ColliderPaths:
-    - - X: 210000000
-        Y: 130000000
-      - X: -10000000
-        Y: 130000000
-      - X: -10000000
-        Y: -10000000
-      - X: 210000000
-        Y: -10000000
-    - - X: 0
-        Y: 0
-      - X: 0
-        Y: 120000000
-      - X: 200000000
-        Y: 120000000
-      - X: 200000000
-        Y: 0
+  m_ColliderPaths: []
   m_CompositePaths:
     m_Paths:
     - - {x: 20.999971, y: -1}
@@ -2015,6 +1997,13 @@ MonoBehaviour:
   dialogText: {fileID: 366639986}
   charSprite: {fileID: 502549658}
   dialogIndex: 0
+  Grid:
+  - {fileID: 6447776745352885712, guid: a07c445a611f897468615682af6268f4, type: 3}
+  - {fileID: 8389016119991297934, guid: 3d84e6a7caf00af418b1bb1b55c806ec, type: 3}
+  - {fileID: 1392179543236465840, guid: 7585fa50609481a4a8d5a7903867e016, type: 3}
+  - {fileID: 8020108172210126104, guid: f6a1ad9f33235de4c9ea13dcf9242321, type: 3}
+  tileSize: {x: 10, y: 6}
+  nowPivot: {x: 0, y: 0}
   player: {fileID: 1415921073}
 --- !u!4 &919535442
 Transform:
@@ -2046,7 +2035,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1128740062
 Transform:
   m_ObjectHideFlags: 0
@@ -2128,7 +2117,7 @@ GameObject:
   - component: {fileID: 1243538437}
   m_Layer: 7
   m_Name: BackGround
-  m_TagString: Untagged
+  m_TagString: Obj
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

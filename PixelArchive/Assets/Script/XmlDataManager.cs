@@ -9,7 +9,7 @@ public class XmlDataManager : MonoBehaviour
     void Start()
     {
         // createXML();
-        loadXml();
+        // loadXml();
         // saveOverlapXml();
     }
 

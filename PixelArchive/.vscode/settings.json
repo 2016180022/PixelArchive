@@ -52,5 +52,6 @@
         "temp/":true,
         "Temp/":true
     },
-    "dotnet.defaultSolution": "PixelArchive.sln"
+    "dotnet.defaultSolution": "PixelArchive.sln",
+    "dotnet.preferCSharpExtension": true
 }
