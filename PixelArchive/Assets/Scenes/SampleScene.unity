@@ -1997,11 +1997,22 @@ MonoBehaviour:
   dialogText: {fileID: 366639986}
   charSprite: {fileID: 502549658}
   dialogIndex: 0
-  Grid:
-  - {fileID: 6447776745352885712, guid: a07c445a611f897468615682af6268f4, type: 3}
-  - {fileID: 8389016119991297934, guid: 3d84e6a7caf00af418b1bb1b55c806ec, type: 3}
-  - {fileID: 1392179543236465840, guid: 7585fa50609481a4a8d5a7903867e016, type: 3}
-  - {fileID: 8020108172210126104, guid: f6a1ad9f33235de4c9ea13dcf9242321, type: 3}
+  hallTile:
+  - {fileID: 4034014128577028838, guid: 2c5027158aabaed4bad0a2fa5676b520, type: 3}
+  - {fileID: 69688695138088988, guid: 49fb05e3f197d5d47a75ec362fce349c, type: 3}
+  cornerTile:
+  - {fileID: 5601915988140497628, guid: 8a22615cfb5ec594284c9dfe362087f5, type: 3}
+  - {fileID: 3816899031123116061, guid: 748eb4eba59c58f41bd01f4cac8e79f8, type: 3}
+  - {fileID: 7962983171385466714, guid: a8f1af8bc7946aa4ca5425681432811a, type: 3}
+  - {fileID: 3316685046660272854, guid: 396989434f31d36458f3eed2b9b2da31, type: 3}
+  roomTile:
+  - {fileID: 2455290466629159242, guid: 63aac9ce009b305418064499abaa4008, type: 3}
+  - {fileID: 4615239848396149726, guid: f1fd303fe74a0824c9156244fff9227d, type: 3}
+  - {fileID: 3684482565741283860, guid: 9a57e635a987ae1489f61c570b95a22c, type: 3}
+  - {fileID: 3873369992438645444, guid: ffe17b2059d290247a3b897bc727c9dd, type: 3}
+  randomTileType: []
+  prevTileDir: 8
+  tileCount: 0
   tileSize: {x: 10, y: 6}
   nowPivot: {x: 0, y: 0}
   player: {fileID: 1415921073}
@@ -4856,7 +4867,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   inputVec: {x: 0, y: 0}
-  speed: 4
+  speed: 10
   gManager: {fileID: 919535441}
   Bullet: {fileID: 2245793434477548876, guid: 706477b00718f6c42844605773f02824, type: 3}
   isBattle: 1

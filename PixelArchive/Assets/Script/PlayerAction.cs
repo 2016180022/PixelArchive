@@ -98,7 +98,7 @@ public class PlayerAction : MonoBehaviour
     }
 
     void OnJump() {
-        Debug.Log("Jump");
+        // Debug.Log("Jump");
         gManager.addTile();
     }
 
