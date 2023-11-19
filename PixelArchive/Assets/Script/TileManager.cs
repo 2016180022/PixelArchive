@@ -1,26 +1,25 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+using Mono.Cecil;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
 public class TileManager : MonoBehaviour
 {
-    public Tilemap tilemap;
-    // public TileBase tempbase;
-
     public GameObject[] hallTile;
     public GameObject[] cornerTile;
     public GameObject[] roomTile;
-    public List<String> randomTileType = new List<string> ();
+    public GameObject[] crossTile;
     public int prevTileDir = 8;
     
     public UnityEngine.Vector2Int tileSize = new Vector2Int(10, 6);   //Param으로 받거나 따로 관리해줄 예정이지만 일단 하드코딩
-    public UnityEngine.Vector2Int nowPivot = new Vector2Int(0, 0);
+    public UnityEngine.Vector2Int nowPivot = new Vector2Int(0, 12);
     public List<Vector2Int> pivotList;
+    public List<String> randomTileType = new List<string>();
+    public Dictionary<String, int> tileTypeAndWeight = new Dictionary<string, int>();    //tileType과 가중치
 
-    public Dictionary<Vector3Int, bool> objectOnTile;   //오브젝트가 타일 위에 있는가에 대한 정보
-    public Dictionary<Vector3Int, int> objectCount;     //타일 위에 있는 오브젝트 개수에 대한 정보
 
     public void Start() {
         //Hall/Corner 랜덤 뽑기
@@ -29,22 +28,38 @@ public class TileManager : MonoBehaviour
         randomTileType.Add("Hall");
         randomTileType.Add("Corner");
         }
+        
+        //각 type의 Tile이 GameObject에 연결되어 있으면, dict에 추가
+        if (hallTile.Length > 0) tileTypeAndWeight.Add("Hall", 45);
+        if (cornerTile.Length > 0) tileTypeAndWeight.Add("Corner", 45);
+        if (crossTile.Length > 0) tileTypeAndWeight.Add("Cross",10);
+
         pivotList.Add(nowPivot);
     }
-    public void loadTile() {
-        foreach (Vector3Int pos in tilemap.cellBounds.allPositionsWithin)
-        {
-            //해당 좌표에 타일이 없으면 넘어감
-            if(!tilemap.HasTile(pos)) continue;
-            var tile = tilemap.GetTile<TileBase>(pos);
-            //정보 초기화
-            objectOnTile.Add(pos, true);
-            objectCount.Add(pos, 1);
-            Debug.Log(objectOnTile);
-            Debug.Log(objectCount);
-        }
-    }
 
+    private int getRandom(Dictionary<String,int> weightDict) {
+        //sumWeight 변수 설정
+        int sumWeight = 0;
+        List<int> weightList = new List<int>();
+
+        foreach (var type in weightDict){
+            sumWeight += type.Value;
+            weightList.Add(sumWeight);
+        }
+        // Debug.Log("sumWeight " + sumWeight);
+        // Debug.Log(weightList[0] + ", " + weightList[1]);
+        
+        int index = 0;
+        int rand = UnityEngine.Random.Range(0, sumWeight);
+        for (int i = 0; i < weightList.Count; i++) {
+            if (rand < weightList[i]) {
+                index = i;
+                break;
+            }
+        }
+        // Debug.Log("rand is " + rand + ", now index " + index);
+        return index;
+    }
     //중복 타일 체크 함수
     public bool checkTile(int tileDir, Vector2Int nextPivot) {
         if (tileDir == 2) {
@@ -87,13 +102,13 @@ public class TileManager : MonoBehaviour
     }
 
     public void addTile() {
-        //우선 겹치는 거 상관 없이 해봅시다
         UnityEngine.Vector3 tilePos = new UnityEngine.Vector3(nowPivot.x, nowPivot.y, transform.position.z);
-        
-        int typeRandom = UnityEngine.Random.Range(0, randomTileType.Count);
-        // int typeRandom = 0;
-        // int hallrandom = UnityEngine.Random.Range(0, hallTile.Length());
-        if (typeRandom == 0) {
+
+        //가중치 랜덤 함수
+        int tileType = getRandom(tileTypeAndWeight);
+
+        //randomType 0: Hall / 1: Corner / 2: room / 3: cross
+        if (tileType == 0) {
             //Hall 생성
                 //Hall은 이전 TileDir에 따라 대응하는 1가지 밖에 생성하지 못하기 때문에 확정
             if (prevTileDir == 2) {
@@ -125,7 +140,7 @@ public class TileManager : MonoBehaviour
                 return;
             }
         }
-        else if (typeRandom == 1) {
+        else if (tileType == 1) {
             //Corner 생성
             int cornerRandom = UnityEngine.Random.Range(0, 2);
             if (prevTileDir == 2) {
@@ -198,9 +213,8 @@ public class TileManager : MonoBehaviour
             }
         }
 
-        Debug.Log("nowPivot: (" + nowPivot.x + ", " + nowPivot.y + ")");
+        // Debug.Log("nowPivot: (" + nowPivot.x + ", " + nowPivot.y + ")");
         // Debug.Log(pivotList[pivotList.Count - 1].x + ", " + pivotList[pivotList.Count - 1].y);
-        // loadTile();
     }
 
 }

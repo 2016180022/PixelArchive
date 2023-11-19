@@ -1,11 +1,20 @@
 ﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <CharacterInfo>
   <Character>
-    <EnemyName>Monster1</EnemyName>
-    <EnemyType>tempType</EnemyType>
+    <EnemyName>Monster0</EnemyName>
+    <EnemyType>Single</EnemyType>
     <Health>1</Health>
-    <Speed>1</Speed>
-    <Range>1</Range>
+    <Speed>2.5</Speed>
+    <Range>10</Range>
+    <MaxShotDelay>1</MaxShotDelay>
+  </Character>
+  <Character>
+    <EnemyName>Monster1</EnemyName>
+    <EnemyType>3Burst</EnemyType>
+    <Health>1</Health>
+    <Speed>2.5</Speed>
+    <Range>8</Range>
+    <MaxShotDelay>2</MaxShotDelay>
   </Character>
   <Character>
     <EnemyName>Monster2</EnemyName>
@@ -13,12 +22,6 @@
     <Health>1</Health>
     <Speed>1</Speed>
     <Range>1</Range>
-  </Character>
-  <Character>
-    <EnemyName>Monster3</EnemyName>
-    <EnemyType>tempType</EnemyType>
-    <Health>1</Health>
-    <Speed>1</Speed>
-    <Range>1</Range>
+    <MaxShotDelay>1</MaxShotDelay>
   </Character>
 </CharacterInfo>
