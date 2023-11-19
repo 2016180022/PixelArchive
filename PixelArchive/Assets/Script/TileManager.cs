@@ -89,8 +89,7 @@ public class TileManager : MonoBehaviour
     public void addTile() {
         //우선 겹치는 거 상관 없이 해봅시다
         UnityEngine.Vector3 tilePos = new UnityEngine.Vector3(nowPivot.x, nowPivot.y, transform.position.z);
-        UnityEngine.Vector2Int nextPivot = nowPivot;
-
+        
         int typeRandom = UnityEngine.Random.Range(0, randomTileType.Count);
         // int typeRandom = 0;
         // int hallrandom = UnityEngine.Random.Range(0, hallTile.Length());
@@ -98,32 +97,28 @@ public class TileManager : MonoBehaviour
             //Hall 생성
                 //Hall은 이전 TileDir에 따라 대응하는 1가지 밖에 생성하지 못하기 때문에 확정
             if (prevTileDir == 2) {
-                nextPivot.y -= tileSize.y * 2;          //다음 pviot 위치 동기화
-                if (!checkTile(2, nextPivot)) return;   //tile 생성 가능 체크
+                if (!checkTile(2, nowPivot)) return;    //tile 생성 가능 체크
                 GameObject hall = Instantiate(hallTile[0], tilePos, transform.rotation);//tile 생성
                 pivotList.Add(nowPivot);                //pivotList에 추가한 pivot 추가
-                nowPivot = nextPivot;                   //pivot 위치 동기화
+                nowPivot.y -= tileSize.y * 2;           //pivot 위치 동기화
             }
             else if (prevTileDir == 8) {
-                nextPivot.y += tileSize.y * 2;
-                if (!checkTile(8, nextPivot)) return;
+                if (!checkTile(8, nowPivot)) return;
                 GameObject hall = Instantiate(hallTile[0], tilePos, transform.rotation);
                 pivotList.Add(nowPivot);
-                nowPivot = nextPivot;
+                nowPivot.y += tileSize.y * 2;
             }
             else if (prevTileDir == 4) {
-                nextPivot.x -= tileSize.x * 2;
-                if (!checkTile(4, nextPivot)) return;
+                if (!checkTile(4, nowPivot)) return;
                 GameObject hall = Instantiate(hallTile[1], tilePos, transform.rotation);
                 pivotList.Add(nowPivot);
-                nowPivot = nextPivot;
+                nowPivot.x -= tileSize.x * 2;
             }
             else if (prevTileDir == 6) {
-                nextPivot.x += tileSize.x * 2;
-                if (!checkTile(6, nextPivot)) return;
+                if (!checkTile(6, nowPivot)) return;
                 GameObject hall = Instantiate(hallTile[1], tilePos, transform.rotation);
                 pivotList.Add(nowPivot);
-                nowPivot = nextPivot;
+                nowPivot.x += tileSize.x * 2;
             }
             else {
                 Debug.Log("prevTileDir이 " + prevTileDir + "이/가 될 수 있나요?");
@@ -135,73 +130,65 @@ public class TileManager : MonoBehaviour
             int cornerRandom = UnityEngine.Random.Range(0, 2);
             if (prevTileDir == 2) {
                 if (cornerRandom == 0) {
-                    nextPivot.x += tileSize.x * 2;
-                    if (!checkTile(6, nextPivot)) return;
+                    if (!checkTile(6, nowPivot)) return;
                     GameObject corner = Instantiate(cornerTile[0], tilePos, transform.rotation);
                     pivotList.Add(nowPivot);
-                    nowPivot = nextPivot;
+                    nowPivot.x += tileSize.x * 2;
                     prevTileDir = 6;
                 }
-                else if (cornerRandom == 1) {
-                    nextPivot.x -= tileSize.x * 2;
-                    if (!checkTile(4, nextPivot)) return;
+                else if (cornerRandom == 1) {                   
+                    if (!checkTile(4, nowPivot)) return;
                     GameObject corner = Instantiate(cornerTile[1], tilePos, transform.rotation);
                     pivotList.Add(nowPivot);
-                    nowPivot = nextPivot;
+                    nowPivot.x -= tileSize.x * 2;
                     prevTileDir = 4;
                 }
             }
             else if (prevTileDir == 8) {
-                if (cornerRandom == 0) {
-                    nextPivot.x += tileSize.x * 2;
-                    if (!checkTile(6, nextPivot)) return;
+                if (cornerRandom == 0) {                   
+                    if (!checkTile(6, nowPivot)) return;
                     GameObject corner = Instantiate(cornerTile[2], tilePos, transform.rotation);
                     pivotList.Add(nowPivot);
-                    nowPivot = nextPivot;
+                    nowPivot.x += tileSize.x * 2;
                     prevTileDir = 6;
                 }
                 else if (cornerRandom == 1) {
-                    nextPivot.x -= tileSize.x * 2;
-                    if (!checkTile(4, nextPivot)) return;
+                    if (!checkTile(4, nowPivot)) return;
                     GameObject corner = Instantiate(cornerTile[3], tilePos, transform.rotation);
                     pivotList.Add(nowPivot);
-                    nowPivot = nextPivot;
+                    nowPivot.x -= tileSize.x * 2;
                     prevTileDir = 4;
                 }
             }
             else if (prevTileDir == 6) {
                 if (cornerRandom == 0) {
-                    nextPivot.y += tileSize.y * 2;
-                    if (!checkTile(8, nextPivot)) return;
+                    if (!checkTile(8, nowPivot)) return;
                     GameObject corner = Instantiate(cornerTile[1], tilePos, transform.rotation);
                     pivotList.Add(nowPivot);
-                    nowPivot = nextPivot;
+                    nowPivot.y += tileSize.y * 2;
                     prevTileDir = 8;
                 }
                 else if (cornerRandom == 1) {
-                    nextPivot.y -= tileSize.y * 2;
-                    if (!checkTile(2, nextPivot)) return;
+                    if (!checkTile(2, nowPivot)) return;
                     GameObject corner = Instantiate(cornerTile[3], tilePos, transform.rotation);
                     pivotList.Add(nowPivot);
-                    nowPivot = nextPivot;
+                    nowPivot.y -= tileSize.y * 2;
                     prevTileDir = 2;
                 }
             }
             else if (prevTileDir == 4) {
                 if (cornerRandom == 0) {
-                    nextPivot.y += tileSize.y * 2;
-                    if (!checkTile(8, nextPivot)) return;
+                    if (!checkTile(8, nowPivot)) return;
                     GameObject corner = Instantiate(cornerTile[0], tilePos, transform.rotation);
                     pivotList.Add(nowPivot);
-                    nowPivot = nextPivot;
+                    nowPivot.y += tileSize.y * 2;
                     prevTileDir = 8;
                 }
                 else if (cornerRandom == 1) {
-                    nextPivot.y -= tileSize.y * 2;
-                    if (!checkTile(2, nextPivot)) return;
+                    if (!checkTile(2, nowPivot)) return;
                     GameObject corner = Instantiate(cornerTile[2], tilePos, transform.rotation);
                     pivotList.Add(nowPivot);
-                    nowPivot = nextPivot;
+                    nowPivot.y -= tileSize.y * 2;
                     prevTileDir = 2;
                 }
             }
@@ -211,8 +198,8 @@ public class TileManager : MonoBehaviour
             }
         }
 
-        // Debug.Log("nowPivot: (" + nowPivot.x + ", " + nowPivot.y + ")");
-        Debug.Log(pivotList);
+        Debug.Log("nowPivot: (" + nowPivot.x + ", " + nowPivot.y + ")");
+        // Debug.Log(pivotList[pivotList.Count - 1].x + ", " + pivotList[pivotList.Count - 1].y);
         // loadTile();
     }
 
