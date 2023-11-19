@@ -9,6 +9,7 @@ public class PlayerAction : MonoBehaviour
     public Vector2 inputVec;
     public float speed;
     public GameManager gManager;
+    public TileManager tManager;
     public GameObject Bullet;
     //임시로 true 설정
     public bool isBattle = true;
@@ -99,7 +100,7 @@ public class PlayerAction : MonoBehaviour
 
     void OnJump() {
         // Debug.Log("Jump");
-        gManager.addTile();
+        tManager.addTile();
     }
 
 }
