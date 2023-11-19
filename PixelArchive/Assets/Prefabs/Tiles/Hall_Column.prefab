@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 3965191645063736693}
   m_Layer: 7
   m_Name: Tilemap
-  m_TagString: Obj
+  m_TagString: Background
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2586,9 +2586,9 @@ GameObject:
   m_Component:
   - component: {fileID: 2457270938552193995}
   - component: {fileID: 5787176399632346984}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Hall_Column
-  m_TagString: Untagged
+  m_TagString: Background
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2636,7 +2636,7 @@ GameObject:
   - component: {fileID: 6123947050069671947}
   - component: {fileID: 2084535944084764301}
   - component: {fileID: 6803713406294041029}
-  m_Layer: 6
+  m_Layer: 7
   m_Name: Border
   m_TagString: Border
   m_Icon: {fileID: 0}

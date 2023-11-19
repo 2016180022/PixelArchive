@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 3836077101066603863}
   m_Layer: 7
   m_Name: Tilemap
-  m_TagString: Obj
+  m_TagString: Background
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2586,9 +2586,9 @@ GameObject:
   m_Component:
   - component: {fileID: 2315608734639879145}
   - component: {fileID: 5938951861097140042}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Room_8
-  m_TagString: Untagged
+  m_TagString: Background
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2636,7 +2636,7 @@ GameObject:
   - component: {fileID: 6253224319573254185}
   - component: {fileID: 2222114528592631471}
   - component: {fileID: 6652078668366676455}
-  m_Layer: 6
+  m_Layer: 7
   m_Name: Border
   m_TagString: Border
   m_Icon: {fileID: 0}

@@ -135,7 +135,7 @@ GameObject:
   - component: {fileID: 36330703}
   m_Layer: 0
   m_Name: TileManager
-  m_TagString: Untagged
+  m_TagString: GameController
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -152,8 +152,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f3b42e34b31ad4544b6bb7ad0e51008d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  temptile: {fileID: 1243538438}
-  tempbase: {fileID: 0}
+  tilemap: {fileID: 1243538438}
   hallTile:
   - {fileID: 4034014128577028838, guid: 2c5027158aabaed4bad0a2fa5676b520, type: 3}
   - {fileID: 69688695138088988, guid: 49fb05e3f197d5d47a75ec362fce349c, type: 3}
@@ -2072,7 +2071,7 @@ GameObject:
   - component: {fileID: 919535441}
   m_Layer: 0
   m_Name: GameManager
-  m_TagString: Untagged
+  m_TagString: GameController
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2159,7 +2158,7 @@ GameObject:
   - component: {fileID: 1152136317}
   m_Layer: 0
   m_Name: DialogManager
-  m_TagString: Untagged
+  m_TagString: GameController
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

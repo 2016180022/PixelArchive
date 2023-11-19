@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 3748362419693621134}
   m_Layer: 7
   m_Name: Tilemap
-  m_TagString: Obj
+  m_TagString: Background
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2586,9 +2586,9 @@ GameObject:
   m_Component:
   - component: {fileID: 2385238668632043824}
   - component: {fileID: 6004359667776605587}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Corner_3
-  m_TagString: Untagged
+  m_TagString: Background
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2636,7 +2636,7 @@ GameObject:
   - component: {fileID: 6340868634044900080}
   - component: {fileID: 2300822010607522934}
   - component: {fileID: 6730715695503754046}
-  m_Layer: 6
+  m_Layer: 7
   m_Name: Border
   m_TagString: Border
   m_Icon: {fileID: 0}
