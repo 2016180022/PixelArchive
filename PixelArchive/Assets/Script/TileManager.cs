@@ -12,7 +12,8 @@ public class TileManager : MonoBehaviour
     public GameObject[] cornerTile;
     public GameObject[] roomTile;
     public GameObject[] crossTile;
-    public int prevTileDir = 8;
+    public int prevTileDir = 8;                                     //직전 생성된 Tile의 방향
+    public int minTileCount = 10;                                   //Room이 생성되기 위한 최소 타일 수
     
     public UnityEngine.Vector2Int tileSize = new Vector2Int(10, 6); //Param으로 받거나 따로 관리해줄 예정이지만 일단 하드코딩
     public UnityEngine.Vector2Int nowPivot = new Vector2Int();
@@ -34,6 +35,7 @@ public class TileManager : MonoBehaviour
         if (hallTile.Length > 0) tileTypeAndWeight.Add("Hall", 45);
         if (cornerTile.Length > 0) tileTypeAndWeight.Add("Corner", 45);
         if (crossTile.Length > 0) tileTypeAndWeight.Add("Cross",10);
+        if (roomTile.Length > 0) tileTypeAndWeight.Add("Room",10);
 
         pivotList.Add(nowPivot);
 
@@ -224,6 +226,22 @@ public class TileManager : MonoBehaviour
                 Debug.Log("prevTileDir이 " + prevTileDir + "이/가 될 수 있나요?");
                 return;
             }
+        }
+        else if (tileType == 2) {
+            //최소한의 Tile 길이가 존재해야 하므로, 우선 해당 판정
+            if (pivotList.Count < minTileCount) {
+                Debug.Log("Room 타일이 생성되려고 했지만, 최소 타일 수에 도달하지 않아 return합니다");
+                return;
+            }
+
+            //Room 생성
+            if (prevTileDir == 2) { GameObject room = Instantiate(roomTile[0], tilePos, transform.rotation); }
+            else if (prevTileDir == 4) { GameObject room = Instantiate(roomTile[1], tilePos, transform.rotation); }
+            else if (prevTileDir == 6) { GameObject room = Instantiate(roomTile[2], tilePos, transform.rotation); }
+            else if (prevTileDir == 8) { GameObject room = Instantiate(roomTile[3], tilePos, transform.rotation); }
+
+            //Room 생성 후에는 더 이상 해당 Pivot을 트래킹 할 필요가 없으므로, crossedPivotList에서 남은 Pivot을 생성해주러 이동
+            Debug.Log("이번 갈림길 Pivot의 Room이 생성되었습니다.");
         }
 
         tileTypeList.Add(tileType); //정상적으로 추가 되었을 때만 tileTypeList에 추가
