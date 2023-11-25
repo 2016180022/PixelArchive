@@ -14,10 +14,11 @@ public class TileManager : MonoBehaviour
     public GameObject[] crossTile;
     public int prevTileDir = 8;
     
-    public UnityEngine.Vector2Int tileSize = new Vector2Int(10, 6);   //Param으로 받거나 따로 관리해줄 예정이지만 일단 하드코딩
-    public UnityEngine.Vector2Int nowPivot = new Vector2Int(0, 12);
+    public UnityEngine.Vector2Int tileSize = new Vector2Int(10, 6); //Param으로 받거나 따로 관리해줄 예정이지만 일단 하드코딩
+    public UnityEngine.Vector2Int nowPivot = new Vector2Int();
     public List<Vector2Int> pivotList;
     public List<String> randomTileType = new List<string>();
+    public List<int> tileTypeList = new List<int>();           //만들어진 TileType에 대한 List (연속 검사용)    
     public Dictionary<String, int> tileTypeAndWeight = new Dictionary<string, int>();    //tileType과 가중치
 
 
@@ -35,8 +36,12 @@ public class TileManager : MonoBehaviour
         if (crossTile.Length > 0) tileTypeAndWeight.Add("Cross",10);
 
         pivotList.Add(nowPivot);
+
+        //Pivot 기본값 조정
+        nowPivot = new Vector2Int(0, 12);
     }
 
+    //공용 사용의 여지가 있으니, 최대한 범용성 있게 함수 구성
     private int getRandom(Dictionary<String,int> weightDict) {
         //sumWeight 변수 설정
         int sumWeight = 0;
@@ -106,6 +111,14 @@ public class TileManager : MonoBehaviour
 
         //가중치 랜덤 함수
         int tileType = getRandom(tileTypeAndWeight);
+        
+        //HallType 중복 검사
+        if (tileTypeList.Count >= 2) {
+            int length = tileTypeList.Count;
+            if (tileTypeList[length - 1] == 0 && tileTypeList[length - 2] == 0) {
+                tileType = 1;       //Hall이 두번 나왔을 경우, 강제로 Corner 생성
+            }
+        }
 
         //randomType 0: Hall / 1: Corner / 2: room / 3: cross
         if (tileType == 0) {
@@ -213,7 +226,10 @@ public class TileManager : MonoBehaviour
             }
         }
 
-        // Debug.Log("nowPivot: (" + nowPivot.x + ", " + nowPivot.y + ")");
+        tileTypeList.Add(tileType); //정상적으로 추가 되었을 때만 tileTypeList에 추가
+
+        Debug.Log("nowPivot: (" + nowPivot.x + ", " + nowPivot.y + ")");
+        Debug.Log("nowTileType:" + tileType);
         // Debug.Log(pivotList[pivotList.Count - 1].x + ", " + pivotList[pivotList.Count - 1].y);
     }
 
