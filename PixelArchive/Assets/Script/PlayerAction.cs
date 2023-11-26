@@ -103,4 +103,9 @@ public class PlayerAction : MonoBehaviour
         tManager.addTile();
     }
 
+    void OnDash() {
+        Vector2 mousePos = playerCamera.ScreenToWorldPoint(Input.mousePosition);
+        gManager.generateMob(mousePos);
+    }
+
 }

@@ -6,6 +6,7 @@ using TMPro;
 using System;
 using Unity.VisualScripting;
 using System.Linq;
+using Unity.Mathematics;
 
 public class GameManager : MonoBehaviour
 {
@@ -19,6 +20,8 @@ public class GameManager : MonoBehaviour
 
     public PlayerAction player;
     public static GameManager instance;
+
+    public GameObject[] mobList;                //시연용 제너레이터에 사용할 몬스터 프리팹
 
     private void Awake() {
         instance = this;
@@ -56,4 +59,12 @@ public class GameManager : MonoBehaviour
         dialogIndex++;
     }
 
+    //시연용으로 사용할 몬스터 제너레이터
+    public void generateMob(Vector2 pos) {
+        int i = UnityEngine.Random.Range(0, 2);
+        // Vector3 mobPos = new Vector3(pos.x, pos.y, transform.position.z);
+        // GameObject mob = Instantiate(mobList[i], mobPos, transform.rotation);
+        GameObject mob = Instantiate(mobList[i], pos, transform.rotation);
+        Debug.Log("Mob 생성 완료 (Type:" + i + ")");
+    }
 }
