@@ -162,7 +162,7 @@ MonoBehaviour:
   enemyType: 3Burst
   speed: 2.5
   health: 1
-  attackRange: 8
+  attackRange: 5
   curShotDelay: 0
   maxShotDelay: 2
   Bullet: {fileID: 319256648377821029, guid: 116e8553e5942624f925ecb3b420d33e, type: 3}

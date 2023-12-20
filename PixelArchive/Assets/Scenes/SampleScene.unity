@@ -165,14 +165,23 @@ MonoBehaviour:
   - {fileID: 4615239848396149726, guid: f1fd303fe74a0824c9156244fff9227d, type: 3}
   - {fileID: 3684482565741283860, guid: 9a57e635a987ae1489f61c570b95a22c, type: 3}
   - {fileID: 3873369992438645444, guid: ffe17b2059d290247a3b897bc727c9dd, type: 3}
-  crossTile: []
+  crossTile:
+  - {fileID: 6082542540676448955, guid: 5d39afa3af003d34eb0043bbc812f2ea, type: 3}
+  - {fileID: 6082542540676448955, guid: 1e95b31b70d789448961e8813c01634b, type: 3}
+  - {fileID: 6082542540676448955, guid: 14865ea7d5336464eaff386a2950b4df, type: 3}
+  - {fileID: 6082542540676448955, guid: e95f352b604c669408c12f693aeb87f6, type: 3}
   prevTileDir: 8
   minTileCount: 10
+  roomCount: 0
   tileSize: {x: 10, y: 6}
   nowPivot: {x: 0, y: 0}
   pivotList: []
   randomTileType: []
   tileTypeList: 
+  crossedPivotList: []
+  crossedPivotPrevDirList: 
+  crossedPivotCount: 0
+  isCorner: 0
 --- !u!4 &36330704
 Transform:
   m_ObjectHideFlags: 0
