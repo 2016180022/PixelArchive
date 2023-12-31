@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -106,6 +107,24 @@ public class PlayerAction : MonoBehaviour
     void OnDash() {
         Vector2 mousePos = playerCamera.ScreenToWorldPoint(Input.mousePosition);
         gManager.generateMob(mousePos);
+    }
+
+    void OnTriggerEnter2D(Collider2D other) {
+        if (other.tag == "Item") {
+            Item item = other.GetComponent<Item>();
+            switch(item.type) {
+                case Item.itemType.Coin:
+                Debug.Log("Coin " + item.value + "개 획득!");
+                break;
+                case Item.itemType.Heart:
+                Debug.Log("Hp " + item.value + "회복!");
+                break;
+                case Item.itemType.Skill:
+                Debug.Log("스킬은 아직 미구현입니다 ㅜ");
+                break;
+            }
+            Destroy(other.gameObject);
+        }
     }
 
 }

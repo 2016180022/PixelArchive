@@ -12,6 +12,7 @@ TagManager:
   - Enemy
   - EnemyBullet
   - Background
+  - Item
   layers:
   - Default
   - TransparentFX
