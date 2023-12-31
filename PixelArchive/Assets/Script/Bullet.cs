@@ -23,6 +23,12 @@ public class Bullet : MonoBehaviour
             if (this.piercingCount <= 1) Destroy(gameObject);
             else this.piercingCount -= 1;
         }
+        else if (this.CompareTag("Bullet") && other.CompareTag("Obj")) {
+            Destroy(gameObject);
+            ObjectData obj = other.GetComponent<ObjectData>();
+            obj.dropItem();
+            Destroy(other.gameObject);
+        }
         else if (this.CompareTag("EnemyBullet") && other.CompareTag("Player")) {
             Destroy(gameObject);
         }
