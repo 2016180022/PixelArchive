@@ -148,6 +148,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: 0
   isNpc: 0
+  isDropable: 1
   Coin:
   - {fileID: 4143762569739754006, guid: 86e5b433a3c5cc24b9614d3024e54c7c, type: 3}
   - {fileID: 4143762569739754006, guid: 8dfdaca3abbb66a4f84a489223f7cf17, type: 3}

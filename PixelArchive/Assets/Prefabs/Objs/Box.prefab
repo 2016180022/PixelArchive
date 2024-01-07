@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 6499730569182213003}
   - component: {fileID: 6499730569182213000}
   - component: {fileID: 6499730569182213001}
+  - component: {fileID: -5506383920329787996}
   m_Layer: 8
   m_Name: Box
   m_TagString: BorderObj
@@ -133,3 +134,21 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
+--- !u!114 &-5506383920329787996
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6499730569182213047}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cf44268b95dcf4f46a2260ab7c08651b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  id: 0
+  isNpc: 0
+  isDropable: 0
+  Coin: []
+  Heart: {fileID: 0}
+  Skill: []

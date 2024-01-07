@@ -26,11 +26,8 @@ public class Bullet : MonoBehaviour
         else if (this.CompareTag("Bullet") && other.CompareTag("Obj")) {
             Destroy(gameObject);
             ObjectData obj = other.GetComponent<ObjectData>();
-            obj.dropItem();
+            if (obj.isDropable) obj.dropItem();
             Destroy(other.gameObject);
-        }
-        else if (this.CompareTag("EnemyBullet") && other.CompareTag("Player")) {
-            Destroy(gameObject);
         }
     }
 

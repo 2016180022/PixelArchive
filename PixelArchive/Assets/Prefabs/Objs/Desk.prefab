@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1913649175736052382}
   - component: {fileID: 3057281997638764962}
+  - component: {fileID: 7900268521616198274}
   m_Layer: 8
   m_Name: Desk
   m_TagString: Obj
@@ -84,3 +85,21 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &7900268521616198274
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2831556294753351157}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cf44268b95dcf4f46a2260ab7c08651b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  id: 0
+  isNpc: 0
+  isDropable: 0
+  Coin: []
+  Heart: {fileID: 0}
+  Skill: []

@@ -7,6 +7,7 @@ public class ObjectData : MonoBehaviour
 {
     public int id;
     public bool isNpc;
+    public bool isDropable = false;
 
     public GameObject[] Coin;
     public GameObject Heart;

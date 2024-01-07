@@ -12,9 +12,10 @@ public class PlayerAction : MonoBehaviour
     public GameManager gManager;
     public TileManager tManager;
     public GameObject Bullet;
-    //임시로 true 설정
-    public bool isBattle = true;
-
+    public GameObject playerShield;
+    public bool isActiveShield = false;
+    float shieldActiveTime;
+    
     Rigidbody2D rigid;
     Animator anim;
     GameObject scanObj;
@@ -77,6 +78,16 @@ public class PlayerAction : MonoBehaviour
         */
         Vector2 moveVector = inputVec * speed * Time.fixedDeltaTime;
         rigid.MovePosition(rigid.position + moveVector);
+        
+        if (isActiveShield) {
+            shieldActiveTime += Time.fixedDeltaTime;
+            playerShield.transform.position = rigid.transform.position;
+
+            if (shieldActiveTime >= 5.0f) {
+                playerShield.SetActive(false);
+                isActiveShield = false;
+            }
+        }
     }
 
     //Renewal Input System
@@ -101,7 +112,7 @@ public class PlayerAction : MonoBehaviour
 
     void OnJump() {
         // Debug.Log("Jump");
-        tManager.addTile();
+        // tManager.addTile();
     }
 
     void OnDash() {
@@ -125,6 +136,39 @@ public class PlayerAction : MonoBehaviour
             }
             Destroy(other.gameObject);
         }
+        //Bullet.cs에서 처리해주던 충돌 처리를 Player로 이관
+        else if (other.tag == "EnemyBullet") {
+            //피격 처리
+            Debug.Log("피격");
+            Destroy(other.gameObject);
+        }
     }
 
+    void skillFiveShot() {
+        OnFire();
+        Invoke("OnFire", 0.1f);
+        Invoke("OnFire", 0.2f);
+        Invoke("OnFire", 0.3f);
+        Invoke("OnFire", 0.4f);
+    }
+
+    void skillShield() {
+        if (!isActiveShield) {
+            isActiveShield = true;
+            playerShield.SetActive(true);
+            shieldActiveTime = 0;
+        }
+    }
+
+    void OnSkill1() {
+        skillFiveShot();
+    }
+
+    void OnSkill2() {
+        skillShield();
+    }
+
+    void OnSKill3() {
+
+    }
 }
