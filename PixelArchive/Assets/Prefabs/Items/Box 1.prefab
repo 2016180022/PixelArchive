@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 239869052121874523}
   - component: {fileID: 239869052121874522}
   m_Layer: 8
-  m_Name: Box
+  m_Name: Box 1
   m_TagString: Item
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -147,4 +147,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   type: 0
-  value: 1
+  value: 2

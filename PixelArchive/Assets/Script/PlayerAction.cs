@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -12,9 +13,12 @@ public class PlayerAction : MonoBehaviour
     public GameManager gManager;
     public TileManager tManager;
     public GameObject Bullet;
+
+    //skill variable
     public GameObject playerShield;
     public bool isActiveShield = false;
     float shieldActiveTime;
+    public int[] skillSlot;
     
     Rigidbody2D rigid;
     Animator anim;
@@ -131,7 +135,8 @@ public class PlayerAction : MonoBehaviour
                 Debug.Log("Hp " + item.value + "회복!");
                 break;
                 case Item.itemType.Skill:
-                Debug.Log("스킬은 아직 미구현입니다 ㅜ");
+                // Debug.Log("스킬은 아직 미구현입니다 ㅜ");
+                getSkill(item.value);
                 break;
             }
             Destroy(other.gameObject);
@@ -142,6 +147,20 @@ public class PlayerAction : MonoBehaviour
             Debug.Log("피격");
             Destroy(other.gameObject);
         }
+    }
+
+    void getSkill(int skillIndex) {
+        if (skillSlot[0] == 0) skillSlot[0] = skillIndex;
+        else if (skillSlot[1] == 0) skillSlot[1] = skillIndex;
+        else if (skillSlot[2] == 0) skillSlot[2] = skillIndex;
+        Debug.Log("1번 슬롯: " + skillSlot[0]);
+        Debug.Log("2번 슬롯: " + skillSlot[1]);
+        Debug.Log("3번 슬롯: " + skillSlot[2]);
+    }
+
+    void useSkill(int skillIndex) {
+        if (skillIndex == 1) {skillFiveShot();}
+        else if (skillIndex == 2) {skillShield();}
     }
 
     void skillFiveShot() {
@@ -161,14 +180,20 @@ public class PlayerAction : MonoBehaviour
     }
 
     void OnSkill1() {
-        skillFiveShot();
+        if (skillSlot[0] == 0) return;
+        useSkill(skillSlot[0]);
+        skillSlot[0] = 0;
     }
 
     void OnSkill2() {
-        skillShield();
+        if (skillSlot[1] == 0) return;
+        useSkill(skillSlot[1]);
+        skillSlot[1] = 0;
     }
 
-    void OnSKill3() {
-
+    void OnSkill3() {
+        if (skillSlot[2] == 0) return;
+        useSkill(skillSlot[2]);
+        skillSlot[2] = 0;
     }
 }
