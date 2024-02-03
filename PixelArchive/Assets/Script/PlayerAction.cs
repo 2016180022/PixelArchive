@@ -21,12 +21,14 @@ public class PlayerAction : MonoBehaviour
     public int[] skillSlot;
     
     Rigidbody2D rigid;
+    SpriteRenderer spriter;
     Animator anim;
     GameObject scanObj;
     Camera playerCamera;
     
     void Awake() {
         rigid = GetComponent<Rigidbody2D>();
+        spriter = GetComponent<SpriteRenderer>();
         anim = GetComponent<Animator>();
         playerCamera = GameObject.Find("Main Camera").GetComponent<Camera>();
     }
@@ -38,8 +40,6 @@ public class PlayerAction : MonoBehaviour
 
         if (gManager.isDialogActive) return;
 
-        moveUpdate();
-
         /*
         //방향 레이 동기화
         if (vDown && v == 1) dirVec = Vector3.up;
@@ -48,22 +48,6 @@ public class PlayerAction : MonoBehaviour
         else if (hDown && v == 1) dirVec = Vector3.right;
         */
 
-    }
-
-    private void moveUpdate() {
-        if (inputVec.x != 0) {
-            if (inputVec.x != anim.GetInteger("horizonAxisRaw")) anim.SetBool("isDirectionChanged", true);
-            else anim.SetBool("isDirectionChanged", false);
-            anim.SetInteger("horizonAxisRaw", (int)inputVec.x);
-        }
-        else anim.SetInteger("horizonAxisRaw", 0);
-
-        if (inputVec.y != 0)  {
-            if (inputVec.y != anim.GetInteger("vertAxisRaw")) anim.SetBool("isDirectionChanged", true);
-            else anim.SetBool("isDirectionChanged", false);
-            anim.SetInteger("vertAxisRaw", (int)inputVec.y);
-        }
-        else anim.SetInteger("vertAxisRaw", 0);
     }
 
     void FixedUpdate() {
@@ -80,7 +64,7 @@ public class PlayerAction : MonoBehaviour
         if (rayHit.collider != null) scanObj = rayHit.collider.gameObject;
         else scanObj = null;
         */
-        Vector2 moveVector = inputVec * speed * Time.fixedDeltaTime;
+        Vector2 moveVector = inputVec.normalized * speed * Time.fixedDeltaTime;
         rigid.MovePosition(rigid.position + moveVector);
         
         if (isActiveShield) {
@@ -91,6 +75,15 @@ public class PlayerAction : MonoBehaviour
                 playerShield.SetActive(false);
                 isActiveShield = false;
             }
+        }
+    }
+
+    void LateUpdate() {
+
+        anim.SetFloat("Speed", inputVec.magnitude);
+
+        if (inputVec.x != 0) {
+            spriter.flipX = inputVec.x < 0;
         }
     }
 
