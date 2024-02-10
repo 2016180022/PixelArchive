@@ -109,7 +109,7 @@ public class PlayerAction : MonoBehaviour
 
     void OnJump() {
         // Debug.Log("Jump");
-        // tManager.addTile();
+        tManager.addTile();
     }
 
     void OnDash() {

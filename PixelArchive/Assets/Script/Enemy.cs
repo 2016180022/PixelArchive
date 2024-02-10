@@ -8,6 +8,7 @@ public class Enemy : MonoBehaviour
     public float speed;
     public float health;
     public float attackRange;
+    public float sightRange;
     public float curShotDelay;
     public float maxShotDelay;
     public GameObject Bullet;
@@ -31,6 +32,8 @@ public class Enemy : MonoBehaviour
         if (!isLive) return;
 
         float targetDis = Vector2.Distance(target.position, rigidB.position);
+
+        if (targetDis > sightRange) return;
 
         if (targetDis < attackRange) {
             FireAndReload();
