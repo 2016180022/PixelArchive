@@ -114,6 +114,13 @@ public class TileManager : MonoBehaviour
         return true;
     }
 
+    //수정 각 보기
+    // 생성 버튼 클릭 시, 모든 타일 생성 및 성공적으로 생성 시에만 타일을 생성하도록 변경
+    // Cross / Room 타일 생성되는 걸 확률이 아니라, 지정한 길이에 따른 계수값으로 생성하도록 변경 (길이 10이면 5에 Cross 생성, 갈림길 이후 3번 진행 후 Room 생성 이런 식)
+    // 타일 타입 당 여러개의 모양 중에서 1가지 생성되록 변경
+    // > 이건 지금 타일 타입별로 배열로 받는 방식에서, 타일 타입별로 각자 다 받고 배열로 여러개의 모양을 받는 식으로 하면 될 듯
+    // 맵 생성 시에 해당 프리팹을 List에 저장해뒀다가, 삭제 처리 시 모두 한번에 삭제하는 기능 구현
+    // 맵 삭제 시 플레이어 다시 0,0으로 보내는 기능도 구현 필요
     public void addTile() {
         UnityEngine.Vector3 tilePos = new UnityEngine.Vector3(nowPivot.x, nowPivot.y, transform.position.z);
 
