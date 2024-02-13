@@ -114,6 +114,7 @@ public class PlayerAction : MonoBehaviour
 
     void OnDash() {
         tManager.deleteAllTile();
+        //타일 삭제 시 플레이어도 다시 0,0으로 보내주는 기능 추가해야 함
     }
 
     void OnTriggerEnter2D(Collider2D other) {

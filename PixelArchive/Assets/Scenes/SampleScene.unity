@@ -153,23 +153,52 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   hallTile:
-  - {fileID: 4034014128577028838, guid: 6e981cad1557cab4cbd2302256f6a7e4, type: 3}
-  - {fileID: 69688695138088988, guid: 49fb05e3f197d5d47a75ec362fce349c, type: 3}
+  - Tile:
+    - {fileID: 4034014128577028838, guid: 6e981cad1557cab4cbd2302256f6a7e4, type: 3}
+    - {fileID: 4034014128577028838, guid: 2c5027158aabaed4bad0a2fa5676b520, type: 3}
+  - Tile:
+    - {fileID: 69688695138088988, guid: 49fb05e3f197d5d47a75ec362fce349c, type: 3}
+    - {fileID: 69688695138088988, guid: a096a1d3089674c48b1ca0dc53249f41, type: 3}
+  - Tile: []
   cornerTile:
-  - {fileID: 5601915988140497628, guid: 8a22615cfb5ec594284c9dfe362087f5, type: 3}
-  - {fileID: 3816899031123116061, guid: 748eb4eba59c58f41bd01f4cac8e79f8, type: 3}
-  - {fileID: 7962983171385466714, guid: a8f1af8bc7946aa4ca5425681432811a, type: 3}
-  - {fileID: 3316685046660272854, guid: 396989434f31d36458f3eed2b9b2da31, type: 3}
+  - Tile:
+    - {fileID: 5601915988140497628, guid: e245d191e58ab2a4ebfb10ab79f1d0ee, type: 3}
+    - {fileID: 5601915988140497628, guid: 8a22615cfb5ec594284c9dfe362087f5, type: 3}
+  - Tile:
+    - {fileID: 3816899031123116061, guid: 748eb4eba59c58f41bd01f4cac8e79f8, type: 3}
+    - {fileID: 3816899031123116061, guid: d3dcac686b6492f43a832f2cf1cb8af5, type: 3}
+  - Tile:
+    - {fileID: 7962983171385466714, guid: a8f1af8bc7946aa4ca5425681432811a, type: 3}
+    - {fileID: 7962983171385466714, guid: a45d3fe5971db99448c76ac9b3ef26ad, type: 3}
+  - Tile:
+    - {fileID: 3316685046660272854, guid: 396989434f31d36458f3eed2b9b2da31, type: 3}
+    - {fileID: 3316685046660272854, guid: 2ab062f5c6b3abd4e8529b6146443a18, type: 3}
   roomTile:
-  - {fileID: 2455290466629159242, guid: 63aac9ce009b305418064499abaa4008, type: 3}
-  - {fileID: 4615239848396149726, guid: f1fd303fe74a0824c9156244fff9227d, type: 3}
-  - {fileID: 3684482565741283860, guid: 9a57e635a987ae1489f61c570b95a22c, type: 3}
-  - {fileID: 3873369992438645444, guid: ffe17b2059d290247a3b897bc727c9dd, type: 3}
+  - Tile:
+    - {fileID: 2455290466629159242, guid: 63aac9ce009b305418064499abaa4008, type: 3}
+    - {fileID: 2455290466629159242, guid: 8ed3105caa09fbb4286782aaa8d63d28, type: 3}
+  - Tile:
+    - {fileID: 4615239848396149726, guid: f1fd303fe74a0824c9156244fff9227d, type: 3}
+    - {fileID: 4615239848396149726, guid: 27e8fd9df5ee9f5468140c448a22a84d, type: 3}
+  - Tile:
+    - {fileID: 3684482565741283860, guid: 9a57e635a987ae1489f61c570b95a22c, type: 3}
+    - {fileID: 3684482565741283860, guid: 17f7fea4d8b7dee43b02c82153d8dec4, type: 3}
+  - Tile:
+    - {fileID: 3873369992438645444, guid: b9c7ef2a37de5304b99ad4071f5b4c1d, type: 3}
+    - {fileID: 3873369992438645444, guid: ffe17b2059d290247a3b897bc727c9dd, type: 3}
   crossTile:
-  - {fileID: 6082542540676448955, guid: 5d39afa3af003d34eb0043bbc812f2ea, type: 3}
-  - {fileID: 6082542540676448955, guid: 1e95b31b70d789448961e8813c01634b, type: 3}
-  - {fileID: 6082542540676448955, guid: 14865ea7d5336464eaff386a2950b4df, type: 3}
-  - {fileID: 6082542540676448955, guid: e95f352b604c669408c12f693aeb87f6, type: 3}
+  - Tile:
+    - {fileID: 6082542540676448955, guid: 5d39afa3af003d34eb0043bbc812f2ea, type: 3}
+    - {fileID: 6082542540676448955, guid: a94c93a905a936a4db18d31511f869c3, type: 3}
+  - Tile:
+    - {fileID: 6082542540676448955, guid: 1e95b31b70d789448961e8813c01634b, type: 3}
+    - {fileID: 6082542540676448955, guid: bce188bb99358854884fbb437d6906c8, type: 3}
+  - Tile:
+    - {fileID: 6082542540676448955, guid: 14865ea7d5336464eaff386a2950b4df, type: 3}
+    - {fileID: 6082542540676448955, guid: 75340e3b9ee3c014f89afad1ee898e5f, type: 3}
+  - Tile:
+    - {fileID: 6082542540676448955, guid: e95f352b604c669408c12f693aeb87f6, type: 3}
+    - {fileID: 6082542540676448955, guid: b662b3901d7ee8c44b50cba91cd2a53d, type: 3}
   prevTileDir: 8
   minTileCount: 10
   roomCount: 0
@@ -178,11 +207,12 @@ MonoBehaviour:
   nowPivot: {x: 0, y: 0}
   pivotList: []
   randomTileType: []
+  tileObjectList: []
   tileTypeList: 
   crossedPivotList: []
   crossedPivotPrevDirList: 
   crossedPivotCount: 0
-  isCorner: 0
+  isCross: 0
 --- !u!4 &36330704
 Transform:
   m_ObjectHideFlags: 0

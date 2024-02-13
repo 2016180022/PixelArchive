@@ -6,12 +6,18 @@ using Mono.Cecil;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
+[Serializable]
+public class TileList {
+    public GameObject[] Tile;
+}
+
 public class TileManager : MonoBehaviour
 {
-    public GameObject[] hallTile;
-    public GameObject[] cornerTile;
-    public GameObject[] roomTile;
-    public GameObject[] crossTile;
+    //Obj[dirType][List]    >2차원 배열은 Inspector 이슈로 보류
+    public TileList[] hallTile;
+    public TileList[] cornerTile;
+    public TileList[] roomTile;
+    public TileList[] crossTile;
     public int prevTileDir;                                                     //직전 생성된 Tile의 방향
     public int minTileCount;                                                    //Room이 생성되기 위한 최소 타일 수
     public int roomCount;
@@ -38,8 +44,10 @@ public class TileManager : MonoBehaviour
         randomTileType.Add("Hall");
         randomTileType.Add("Corner");
         }
-        
+
         //각 type의 Tile이 GameObject에 연결되어 있으면, dict에 추가
+        // 타일 배리에이션 기능 추가로 변수가 살짝 변경됨
+        // 추후 개선 필요
         if (hallTile.Length > 0) tileTypeAndWeight.Add("Hall", 45);
         if (cornerTile.Length > 0) tileTypeAndWeight.Add("Corner", 45);
         if (crossTile.Length > 0) tileTypeAndWeight.Add("Cross",10);
@@ -153,8 +161,6 @@ public class TileManager : MonoBehaviour
     // Cross / Room 타일 생성되는 걸 확률이 아니라, 지정한 길이에 따른 계수값으로 생성하도록 변경 (길이 10이면 5에 Cross 생성, 갈림길 이후 3번 진행 후 Room 생성 이런 식)
     // 타일 타입 당 여러개의 모양 중에서 1가지 생성되록 변경
     // > 이건 지금 타일 타입별로 배열로 받는 방식에서, 타일 타입별로 각자 다 받고 배열로 여러개의 모양을 받는 식으로 하면 될 듯
-    // 맵 생성 시에 해당 프리팹을 List에 저장해뒀다가, 삭제 처리 시 모두 한번에 삭제하는 기능 구현
-    // 맵 삭제 시 플레이어 다시 0,0으로 보내는 기능도 구현 필요
     public void addTile() {
         UnityEngine.Vector3 tilePos = new UnityEngine.Vector3(nowPivot.x, nowPivot.y, transform.position.z);
 
@@ -162,8 +168,9 @@ public class TileManager : MonoBehaviour
         int tileType;
         if (isCross == true) tileType = 3;
         else {tileType = getRandom(tileTypeAndWeight);}
+        // 이거 Cross 벽에 걸려서 생성 못해도 이 변수때문에 계속 생성 못하는 상태가 되어버림... 처리 필요
         
-        //테스트용 Corner타일 생성
+        //테스트용 Cross 타일 생성
         if (pivotList.Count == 10) tileType = 3;
 
         //HallType 중복 검사
@@ -174,34 +181,37 @@ public class TileManager : MonoBehaviour
             }
         }
 
-        //randomType 0: Hall / 1: Corner / 2: room / 3: cross
+        //생성될 Tile의 베리에이션 결정
+        int tileIndex = UnityEngine.Random.Range(0, sameTypeTileCount);
+
+        //randomType 0: Hall / 1: Corner / 2: Room / 3: Cross
         if (tileType == 0) {
             //Hall 생성
                 //Hall은 이전 TileDir에 따라 대응하는 1가지 밖에 생성하지 못하기 때문에 확정
             if (prevTileDir == 2) {
                 if (!checkTile(2, nowPivot)) return;    //tile 생성 가능 체크
-                GameObject hall = Instantiate(hallTile[0], tilePos, transform.rotation);//tile 생성
+                GameObject hall = Instantiate(hallTile[0].Tile[tileIndex], tilePos, transform.rotation);//tile 생성
                 pivotList.Add(nowPivot);                //pivotList에 추가한 pivot 추가
                 addTileList(hall);                      //생성한 타일 tileList에 추가
                 nowPivot.y -= tileSize.y * 2;           //pivot 위치 동기화
             }
             else if (prevTileDir == 8) {
                 if (!checkTile(8, nowPivot)) return;
-                GameObject hall = Instantiate(hallTile[0], tilePos, transform.rotation);
+                GameObject hall = Instantiate(hallTile[0].Tile[tileIndex], tilePos, transform.rotation);
                 pivotList.Add(nowPivot);
                 addTileList(hall);
                 nowPivot.y += tileSize.y * 2;
             }
             else if (prevTileDir == 4) {
                 if (!checkTile(4, nowPivot)) return;
-                GameObject hall = Instantiate(hallTile[1], tilePos, transform.rotation);
+                GameObject hall = Instantiate(hallTile[1].Tile[tileIndex], tilePos, transform.rotation);
                 pivotList.Add(nowPivot);
                 addTileList(hall);
                 nowPivot.x -= tileSize.x * 2;
             }
             else if (prevTileDir == 6) {
                 if (!checkTile(6, nowPivot)) return;
-                GameObject hall = Instantiate(hallTile[1], tilePos, transform.rotation);
+                GameObject hall = Instantiate(hallTile[1].Tile[tileIndex], tilePos, transform.rotation);
                 pivotList.Add(nowPivot);
                 addTileList(hall);
                 nowPivot.x += tileSize.x * 2;
@@ -217,7 +227,7 @@ public class TileManager : MonoBehaviour
             if (prevTileDir == 2) {
                 if (cornerRandom == 0) {
                     if (!checkTile(6, nowPivot)) return;
-                    GameObject corner = Instantiate(cornerTile[0], tilePos, transform.rotation);
+                    GameObject corner = Instantiate(cornerTile[0].Tile[tileIndex], tilePos, transform.rotation);
                     pivotList.Add(nowPivot);
                     addTileList(corner);
                     nowPivot.x += tileSize.x * 2;
@@ -225,7 +235,7 @@ public class TileManager : MonoBehaviour
                 }
                 else if (cornerRandom == 1) {                   
                     if (!checkTile(4, nowPivot)) return;
-                    GameObject corner = Instantiate(cornerTile[1], tilePos, transform.rotation);
+                    GameObject corner = Instantiate(cornerTile[1].Tile[tileIndex], tilePos, transform.rotation);
                     pivotList.Add(nowPivot);
                     addTileList(corner);
                     nowPivot.x -= tileSize.x * 2;
@@ -235,7 +245,7 @@ public class TileManager : MonoBehaviour
             else if (prevTileDir == 8) {
                 if (cornerRandom == 0) {                   
                     if (!checkTile(6, nowPivot)) return;
-                    GameObject corner = Instantiate(cornerTile[2], tilePos, transform.rotation);
+                    GameObject corner = Instantiate(cornerTile[2].Tile[tileIndex], tilePos, transform.rotation);
                     pivotList.Add(nowPivot);
                     addTileList(corner);
                     nowPivot.x += tileSize.x * 2;
@@ -243,7 +253,7 @@ public class TileManager : MonoBehaviour
                 }
                 else if (cornerRandom == 1) {
                     if (!checkTile(4, nowPivot)) return;
-                    GameObject corner = Instantiate(cornerTile[3], tilePos, transform.rotation);
+                    GameObject corner = Instantiate(cornerTile[3].Tile[tileIndex], tilePos, transform.rotation);
                     pivotList.Add(nowPivot);
                     addTileList(corner);
                     nowPivot.x -= tileSize.x * 2;
@@ -253,7 +263,7 @@ public class TileManager : MonoBehaviour
             else if (prevTileDir == 6) {
                 if (cornerRandom == 0) {
                     if (!checkTile(8, nowPivot)) return;
-                    GameObject corner = Instantiate(cornerTile[1], tilePos, transform.rotation);
+                    GameObject corner = Instantiate(cornerTile[1].Tile[tileIndex], tilePos, transform.rotation);
                     pivotList.Add(nowPivot);
                     addTileList(corner);
                     nowPivot.y += tileSize.y * 2;
@@ -261,7 +271,7 @@ public class TileManager : MonoBehaviour
                 }
                 else if (cornerRandom == 1) {
                     if (!checkTile(2, nowPivot)) return;
-                    GameObject corner = Instantiate(cornerTile[3], tilePos, transform.rotation);
+                    GameObject corner = Instantiate(cornerTile[3].Tile[tileIndex], tilePos, transform.rotation);
                     pivotList.Add(nowPivot);
                     addTileList(corner);
                     nowPivot.y -= tileSize.y * 2;
@@ -271,7 +281,7 @@ public class TileManager : MonoBehaviour
             else if (prevTileDir == 4) {
                 if (cornerRandom == 0) {
                     if (!checkTile(8, nowPivot)) return;
-                    GameObject corner = Instantiate(cornerTile[0], tilePos, transform.rotation);
+                    GameObject corner = Instantiate(cornerTile[0].Tile[tileIndex], tilePos, transform.rotation);
                     pivotList.Add(nowPivot);
                     addTileList(corner);
                     nowPivot.y += tileSize.y * 2;
@@ -279,7 +289,7 @@ public class TileManager : MonoBehaviour
                 }
                 else if (cornerRandom == 1) {
                     if (!checkTile(2, nowPivot)) return;
-                    GameObject corner = Instantiate(cornerTile[2], tilePos, transform.rotation);
+                    GameObject corner = Instantiate(cornerTile[2].Tile[tileIndex], tilePos, transform.rotation);
                     pivotList.Add(nowPivot);
                     addTileList(corner);
                     nowPivot.y -= tileSize.y * 2;
@@ -300,19 +310,19 @@ public class TileManager : MonoBehaviour
 
             //Room 생성
             if (prevTileDir == 2) {
-                GameObject room = Instantiate(roomTile[0], tilePos, transform.rotation);
+                GameObject room = Instantiate(roomTile[0].Tile[tileIndex], tilePos, transform.rotation);
                 addTileList(room);
                 }
             else if (prevTileDir == 4) {
-                GameObject room = Instantiate(roomTile[1], tilePos, transform.rotation);
+                GameObject room = Instantiate(roomTile[1].Tile[tileIndex], tilePos, transform.rotation);
                 addTileList(room);
                 }
             else if (prevTileDir == 6) {
-                GameObject room = Instantiate(roomTile[2], tilePos, transform.rotation);
+                GameObject room = Instantiate(roomTile[2].Tile[tileIndex], tilePos, transform.rotation);
                 addTileList(room);
                 }
             else if (prevTileDir == 8) {
-                GameObject room = Instantiate(roomTile[3], tilePos, transform.rotation);
+                GameObject room = Instantiate(roomTile[3].Tile[tileIndex], tilePos, transform.rotation);
                 addTileList(room);
                 }
 
@@ -339,7 +349,7 @@ public class TileManager : MonoBehaviour
                     return;
                 }
                 //4, 6 고정이니까 갈림길 하나 만들어주고
-                GameObject cross = Instantiate(crossTile[0], tilePos, transform.rotation);
+                GameObject cross = Instantiate(crossTile[0].Tile[tileIndex], tilePos, transform.rotation);
                 pivotList.Add(nowPivot);
                 addTileList(cross);
 
@@ -360,7 +370,7 @@ public class TileManager : MonoBehaviour
                     isCross = true;
                     return;
                 }
-                GameObject cross = Instantiate(crossTile[3], tilePos, transform.rotation);
+                GameObject cross = Instantiate(crossTile[3].Tile[tileIndex], tilePos, transform.rotation);
                 pivotList.Add(nowPivot);
                 addTileList(cross);
 
@@ -377,7 +387,7 @@ public class TileManager : MonoBehaviour
                     isCross = true;
                     return;
                 }
-                GameObject cross = Instantiate(crossTile[2], tilePos, transform.rotation);
+                GameObject cross = Instantiate(crossTile[2].Tile[tileIndex], tilePos, transform.rotation);
                 pivotList.Add(nowPivot);
                 addTileList(cross);
 
@@ -394,7 +404,7 @@ public class TileManager : MonoBehaviour
                     isCross = true;
                     return;
                 }
-                GameObject cross = Instantiate(crossTile[1], tilePos, transform.rotation);
+                GameObject cross = Instantiate(crossTile[1].Tile[tileIndex], tilePos, transform.rotation);
                 pivotList.Add(nowPivot);
                 addTileList(cross);
 
