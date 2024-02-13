@@ -12,19 +12,22 @@ public class TileManager : MonoBehaviour
     public GameObject[] cornerTile;
     public GameObject[] roomTile;
     public GameObject[] crossTile;
-    public int prevTileDir = 8;                                     //직전 생성된 Tile의 방향
-    public int minTileCount = 10;                                   //Room이 생성되기 위한 최소 타일 수
-    public int roomCount = 0;
+    public int prevTileDir;                                                     //직전 생성된 Tile의 방향
+    public int minTileCount;                                                    //Room이 생성되기 위한 최소 타일 수
+    public int roomCount;
+
+    public int sameTypeTileCount;                                               //같은 타입의 타일 내 종류 수
     
-    public UnityEngine.Vector2Int tileSize = new Vector2Int(10, 6); //Param으로 받거나 따로 관리해줄 예정이지만 일단 하드코딩
+    public UnityEngine.Vector2Int tileSize = new Vector2Int(10, 6);             //Param으로 받거나 따로 관리해줄 예정이지만 일단 하드코딩
     public UnityEngine.Vector2Int nowPivot = new Vector2Int();
     public List<Vector2Int> pivotList;
-    public List<String> randomTileType = new List<string>();
-    public List<int> tileTypeList = new List<int>();           //만들어진 TileType에 대한 List (연속 검사용)
+    public List<String> randomTileType = new List<string>();                    //TileType에 대한 리스트...인데 지금은 사용 안하는듯?
+    public List<GameObject> tileObjectList = new List<GameObject>();            //만들어진 Tile의 Object List (삭제 처리용)
+    public List<int> tileTypeList = new List<int>();                            //만들어진 TileType에 대한 List (연속 검사용)
     public List<Vector2Int> crossedPivotList = new List<Vector2Int>();          //갈림길 Pivot 리스트. 역순으로 검사해서 진행.
     public List<int> crossedPivotPrevDirList = new List<int>();                 //갈림길 Pivot이 가지는 PrevDir 리스트. 위 리스트와 같이 핸들링.
     public int crossedPivotCount;                                               //갈림길 Pviot의 count. List.count로 핸들링하기에는 동기화 시점을 맞춰줄 수 없어서 따로 처리.
-    public bool isCorner;                                                       //Corner 타입이 나왔는데, 배치 불가능이라 넘어갔을 경우 다음에도 corner를 넣어줄 처리 인자.
+    public bool isCross;                                                        //Corner 타입이 나왔는데, 배치 불가능이라 넘어갔을 경우 다음에도 corner를 넣어줄 처리 인자.
 
     public Dictionary<String, int> tileTypeAndWeight = new Dictionary<string, int>();    //tileType과 가중치
 
@@ -43,7 +46,7 @@ public class TileManager : MonoBehaviour
         if (roomTile.Length > 0) tileTypeAndWeight.Add("Room",10);
 
         pivotList.Add(nowPivot);
-        isCorner = false;
+        isCross = false;
 
         //Pivot 기본값 조정
         nowPivot = new Vector2Int(0, 12);
@@ -73,6 +76,7 @@ public class TileManager : MonoBehaviour
         // Debug.Log("rand is " + rand + ", now index " + index);
         return index;
     }
+    
     //중복 타일 체크 함수
     public bool checkTile(int tileDir, Vector2Int nextPivot) {
         if (tileDir == 2) {
@@ -114,6 +118,36 @@ public class TileManager : MonoBehaviour
         return true;
     }
 
+    //생성한 타일 리스트에 저장하는 함수
+    private void addTileList(GameObject tile) {
+        // 여기서 TileTypeList와 크로스로 체크하기에는 TileTypeList를 최하단에서 한번에 저장해버리기 때문에 불가능
+        // 만약 가능한 방법이 있다면 추후 추가
+        tileObjectList.Add(tile);
+    }
+
+    //생성한 타일 모두 제거하는 함수
+    public void deleteAllTile() {
+        //오브젝트 모두 Destroy
+        foreach(GameObject tile in tileObjectList) {
+            Destroy(tile);
+        }
+
+        //Pivot 정보도 모두 초기화해줘야 함
+        prevTileDir = 8;
+        roomCount = 0;
+        crossedPivotCount = 0;
+
+        nowPivot = new Vector2Int(0,12);
+
+        pivotList.Clear();
+        tileObjectList.Clear();
+        tileTypeList.Clear();
+        crossedPivotList.Clear();
+        crossedPivotPrevDirList.Clear();
+
+        isCross = false;
+    }
+
     //수정 각 보기
     // 생성 버튼 클릭 시, 모든 타일 생성 및 성공적으로 생성 시에만 타일을 생성하도록 변경
     // Cross / Room 타일 생성되는 걸 확률이 아니라, 지정한 길이에 따른 계수값으로 생성하도록 변경 (길이 10이면 5에 Cross 생성, 갈림길 이후 3번 진행 후 Room 생성 이런 식)
@@ -126,7 +160,7 @@ public class TileManager : MonoBehaviour
 
         //가중치 랜덤 함수
         int tileType;
-        if (isCorner == true) tileType = 3;
+        if (isCross == true) tileType = 3;
         else {tileType = getRandom(tileTypeAndWeight);}
         
         //테스트용 Corner타일 생성
@@ -148,24 +182,28 @@ public class TileManager : MonoBehaviour
                 if (!checkTile(2, nowPivot)) return;    //tile 생성 가능 체크
                 GameObject hall = Instantiate(hallTile[0], tilePos, transform.rotation);//tile 생성
                 pivotList.Add(nowPivot);                //pivotList에 추가한 pivot 추가
+                addTileList(hall);                      //생성한 타일 tileList에 추가
                 nowPivot.y -= tileSize.y * 2;           //pivot 위치 동기화
             }
             else if (prevTileDir == 8) {
                 if (!checkTile(8, nowPivot)) return;
                 GameObject hall = Instantiate(hallTile[0], tilePos, transform.rotation);
                 pivotList.Add(nowPivot);
+                addTileList(hall);
                 nowPivot.y += tileSize.y * 2;
             }
             else if (prevTileDir == 4) {
                 if (!checkTile(4, nowPivot)) return;
                 GameObject hall = Instantiate(hallTile[1], tilePos, transform.rotation);
                 pivotList.Add(nowPivot);
+                addTileList(hall);
                 nowPivot.x -= tileSize.x * 2;
             }
             else if (prevTileDir == 6) {
                 if (!checkTile(6, nowPivot)) return;
                 GameObject hall = Instantiate(hallTile[1], tilePos, transform.rotation);
                 pivotList.Add(nowPivot);
+                addTileList(hall);
                 nowPivot.x += tileSize.x * 2;
             }
             else {
@@ -181,6 +219,7 @@ public class TileManager : MonoBehaviour
                     if (!checkTile(6, nowPivot)) return;
                     GameObject corner = Instantiate(cornerTile[0], tilePos, transform.rotation);
                     pivotList.Add(nowPivot);
+                    addTileList(corner);
                     nowPivot.x += tileSize.x * 2;
                     prevTileDir = 6;
                 }
@@ -188,6 +227,7 @@ public class TileManager : MonoBehaviour
                     if (!checkTile(4, nowPivot)) return;
                     GameObject corner = Instantiate(cornerTile[1], tilePos, transform.rotation);
                     pivotList.Add(nowPivot);
+                    addTileList(corner);
                     nowPivot.x -= tileSize.x * 2;
                     prevTileDir = 4;
                 }
@@ -197,6 +237,7 @@ public class TileManager : MonoBehaviour
                     if (!checkTile(6, nowPivot)) return;
                     GameObject corner = Instantiate(cornerTile[2], tilePos, transform.rotation);
                     pivotList.Add(nowPivot);
+                    addTileList(corner);
                     nowPivot.x += tileSize.x * 2;
                     prevTileDir = 6;
                 }
@@ -204,6 +245,7 @@ public class TileManager : MonoBehaviour
                     if (!checkTile(4, nowPivot)) return;
                     GameObject corner = Instantiate(cornerTile[3], tilePos, transform.rotation);
                     pivotList.Add(nowPivot);
+                    addTileList(corner);
                     nowPivot.x -= tileSize.x * 2;
                     prevTileDir = 4;
                 }
@@ -213,6 +255,7 @@ public class TileManager : MonoBehaviour
                     if (!checkTile(8, nowPivot)) return;
                     GameObject corner = Instantiate(cornerTile[1], tilePos, transform.rotation);
                     pivotList.Add(nowPivot);
+                    addTileList(corner);
                     nowPivot.y += tileSize.y * 2;
                     prevTileDir = 8;
                 }
@@ -220,6 +263,7 @@ public class TileManager : MonoBehaviour
                     if (!checkTile(2, nowPivot)) return;
                     GameObject corner = Instantiate(cornerTile[3], tilePos, transform.rotation);
                     pivotList.Add(nowPivot);
+                    addTileList(corner);
                     nowPivot.y -= tileSize.y * 2;
                     prevTileDir = 2;
                 }
@@ -229,6 +273,7 @@ public class TileManager : MonoBehaviour
                     if (!checkTile(8, nowPivot)) return;
                     GameObject corner = Instantiate(cornerTile[0], tilePos, transform.rotation);
                     pivotList.Add(nowPivot);
+                    addTileList(corner);
                     nowPivot.y += tileSize.y * 2;
                     prevTileDir = 8;
                 }
@@ -236,6 +281,7 @@ public class TileManager : MonoBehaviour
                     if (!checkTile(2, nowPivot)) return;
                     GameObject corner = Instantiate(cornerTile[2], tilePos, transform.rotation);
                     pivotList.Add(nowPivot);
+                    addTileList(corner);
                     nowPivot.y -= tileSize.y * 2;
                     prevTileDir = 2;
                 }
@@ -253,10 +299,22 @@ public class TileManager : MonoBehaviour
             }
 
             //Room 생성
-            if (prevTileDir == 2) { GameObject room = Instantiate(roomTile[0], tilePos, transform.rotation); }
-            else if (prevTileDir == 4) { GameObject room = Instantiate(roomTile[1], tilePos, transform.rotation); }
-            else if (prevTileDir == 6) { GameObject room = Instantiate(roomTile[2], tilePos, transform.rotation); }
-            else if (prevTileDir == 8) { GameObject room = Instantiate(roomTile[3], tilePos, transform.rotation); }
+            if (prevTileDir == 2) {
+                GameObject room = Instantiate(roomTile[0], tilePos, transform.rotation);
+                addTileList(room);
+                }
+            else if (prevTileDir == 4) {
+                GameObject room = Instantiate(roomTile[1], tilePos, transform.rotation);
+                addTileList(room);
+                }
+            else if (prevTileDir == 6) {
+                GameObject room = Instantiate(roomTile[2], tilePos, transform.rotation);
+                addTileList(room);
+                }
+            else if (prevTileDir == 8) {
+                GameObject room = Instantiate(roomTile[3], tilePos, transform.rotation);
+                addTileList(room);
+                }
 
             //생성 완료되었으면 카운트 처리
             roomCount++;
@@ -276,13 +334,14 @@ public class TileManager : MonoBehaviour
             if (prevTileDir == 2) {
                 //방향 양 쪽 다 만들 수 있는지 먼저 체크
                 if (!checkTile(4, nowPivot) || !checkTile(6, nowPivot)) {
-                    //만약 안되면 생성을 못하니까, 다음 턴에 무조건 corner를 생성하는 로직을 넣어야 함
-                    isCorner = true;
+                    //만약 안되면 생성을 못하니까, 다음 턴에 무조건 cross를 생성하는 로직을 넣어야 함
+                    isCross = true;
                     return;
                 }
                 //4, 6 고정이니까 갈림길 하나 만들어주고
-                GameObject corner = Instantiate(crossTile[0], tilePos, transform.rotation);
+                GameObject cross = Instantiate(crossTile[0], tilePos, transform.rotation);
                 pivotList.Add(nowPivot);
+                addTileList(cross);
 
                 //이후에 갈 Pivot으로 옮겨줌
                 Vector2Int tempPivot = nowPivot;
@@ -298,11 +357,12 @@ public class TileManager : MonoBehaviour
             }
             else if (prevTileDir == 8) {
                 if (!checkTile(4, nowPivot) || !checkTile(6, nowPivot)) {
-                    isCorner = true;
+                    isCross = true;
                     return;
                 }
-                GameObject corner = Instantiate(crossTile[3], tilePos, transform.rotation);
+                GameObject cross = Instantiate(crossTile[3], tilePos, transform.rotation);
                 pivotList.Add(nowPivot);
+                addTileList(cross);
 
                 Vector2Int tempPivot = nowPivot;
                 tempPivot.x -= tileSize.x * 2;
@@ -314,11 +374,12 @@ public class TileManager : MonoBehaviour
             }
             else if (prevTileDir == 6) {
                 if (!checkTile(2, nowPivot) || !checkTile(8, nowPivot)) {
-                    isCorner = true;
+                    isCross = true;
                     return;
                 }
-                GameObject corner = Instantiate(crossTile[2], tilePos, transform.rotation);
+                GameObject cross = Instantiate(crossTile[2], tilePos, transform.rotation);
                 pivotList.Add(nowPivot);
+                addTileList(cross);
 
                 Vector2Int tempPivot = nowPivot;
                 tempPivot.y -= tileSize.y * 2;
@@ -330,11 +391,12 @@ public class TileManager : MonoBehaviour
             }
             else if (prevTileDir == 4) {
                 if (!checkTile(2, nowPivot) || !checkTile(8, nowPivot)) {
-                    isCorner = true;
+                    isCross = true;
                     return;
                 }
-                GameObject corner = Instantiate(crossTile[1], tilePos, transform.rotation);
+                GameObject cross = Instantiate(crossTile[1], tilePos, transform.rotation);
                 pivotList.Add(nowPivot);
+                addTileList(cross);
 
                 Vector2Int tempPivot = nowPivot;
                 tempPivot.y -= tileSize.y * 2;
@@ -352,6 +414,7 @@ public class TileManager : MonoBehaviour
 
         Debug.Log("nowPivot: (" + nowPivot.x + ", " + nowPivot.y + ")");
         Debug.Log("nowTileType:" + tileType);
+        Debug.Log("현재 생성된 Tile의 개수:" + tileObjectList.Count);
         // Debug.Log(pivotList[pivotList.Count - 1].x + ", " + pivotList[pivotList.Count - 1].y);
     }
 

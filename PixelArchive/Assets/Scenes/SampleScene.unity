@@ -173,6 +173,7 @@ MonoBehaviour:
   prevTileDir: 8
   minTileCount: 10
   roomCount: 0
+  sameTypeTileCount: 2
   tileSize: {x: 10, y: 6}
   nowPivot: {x: 0, y: 0}
   pivotList: []

@@ -113,8 +113,7 @@ public class PlayerAction : MonoBehaviour
     }
 
     void OnDash() {
-        Vector2 mousePos = playerCamera.ScreenToWorldPoint(Input.mousePosition);
-        gManager.generateMob(mousePos);
+        tManager.deleteAllTile();
     }
 
     void OnTriggerEnter2D(Collider2D other) {
