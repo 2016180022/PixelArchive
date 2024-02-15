@@ -201,6 +201,8 @@ MonoBehaviour:
     - {fileID: 6082542540676448955, guid: b662b3901d7ee8c44b50cba91cd2a53d, type: 3}
   prevTileDir: 8
   minTileCount: 10
+  mapLength: 1
+  mapComp: 1
   roomCount: 0
   sameTypeTileCount: 2
   tileSize: {x: 10, y: 6}
@@ -212,6 +214,8 @@ MonoBehaviour:
   crossedPivotList: []
   crossedPivotPrevDirList: 
   crossedPivotCount: 0
+  afterCrossedTileCount: 0
+  nowCrossCount: 0
   isCross: 0
 --- !u!4 &36330704
 Transform:

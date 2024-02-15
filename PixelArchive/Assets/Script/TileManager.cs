@@ -19,9 +19,9 @@ public class TileManager : MonoBehaviour
     public TileList[] roomTile;
     public TileList[] crossTile;
     public int prevTileDir;                                                     //직전 생성된 Tile의 방향
-    public int minTileCount;                                                    //Room이 생성되기 위한 최소 타일 수
-    public int roomCount;
-
+    public int mapLength;                                                       //유저가 설정하는 맵의 길이 (맵 총 길이, Room타일이 생성되는 거리에 관여)
+                                                                                //맵 길이 채우고 나머지 부분에 모두 빈 타일 채워주는 기능?
+    public int mapComp;                                                         //유저가 설정하는 맵의 복잡도 (Cross 타일의 생성 개수)
     public int sameTypeTileCount;                                               //같은 타입의 타일 내 종류 수
     
     public UnityEngine.Vector2Int tileSize = new Vector2Int(10, 6);             //Param으로 받거나 따로 관리해줄 예정이지만 일단 하드코딩
@@ -33,7 +33,10 @@ public class TileManager : MonoBehaviour
     public List<Vector2Int> crossedPivotList = new List<Vector2Int>();          //갈림길 Pivot 리스트. 역순으로 검사해서 진행.
     public List<int> crossedPivotPrevDirList = new List<int>();                 //갈림길 Pivot이 가지는 PrevDir 리스트. 위 리스트와 같이 핸들링.
     public int crossedPivotCount;                                               //갈림길 Pviot의 count. List.count로 핸들링하기에는 동기화 시점을 맞춰줄 수 없어서 따로 처리.
-    public bool isCross;                                                        //Corner 타입이 나왔는데, 배치 불가능이라 넘어갔을 경우 다음에도 corner를 넣어줄 처리 인자.
+    public int afterCrossedTileCount;                                           //갈림길 이후로부터 생성된 타일 수
+    public int nowCrossCount;                                                   //현재 갈림길의 개수
+    public int nowRoomCount;                                                    //현재 Room의 개수
+    public bool isCross;                                                        //Cross 타입이 나왔는데, 배치 불가능이라 넘어갔을 경우 다음에도 Cross를 넣어줄 처리 인자.
 
     public Dictionary<String, int> tileTypeAndWeight = new Dictionary<string, int>();    //tileType과 가중치
 
@@ -50,8 +53,8 @@ public class TileManager : MonoBehaviour
         // 추후 개선 필요
         if (hallTile.Length > 0) tileTypeAndWeight.Add("Hall", 45);
         if (cornerTile.Length > 0) tileTypeAndWeight.Add("Corner", 45);
-        if (crossTile.Length > 0) tileTypeAndWeight.Add("Cross",10);
-        if (roomTile.Length > 0) tileTypeAndWeight.Add("Room",10);
+        // if (crossTile.Length > 0) tileTypeAndWeight.Add("Cross",10);
+        // if (roomTile.Length > 0) tileTypeAndWeight.Add("Room",10);
 
         pivotList.Add(nowPivot);
         isCross = false;
@@ -142,8 +145,10 @@ public class TileManager : MonoBehaviour
 
         //Pivot 정보도 모두 초기화해줘야 함
         prevTileDir = 8;
-        roomCount = 0;
+        nowCrossCount = 0;
+        nowRoomCount = 0;
         crossedPivotCount = 0;
+        afterCrossedTileCount = 0;
 
         nowPivot = new Vector2Int(0,12);
 
@@ -159,8 +164,7 @@ public class TileManager : MonoBehaviour
     //수정 각 보기
     // 생성 버튼 클릭 시, 모든 타일 생성 및 성공적으로 생성 시에만 타일을 생성하도록 변경
     // Cross / Room 타일 생성되는 걸 확률이 아니라, 지정한 길이에 따른 계수값으로 생성하도록 변경 (길이 10이면 5에 Cross 생성, 갈림길 이후 3번 진행 후 Room 생성 이런 식)
-    // 타일 타입 당 여러개의 모양 중에서 1가지 생성되록 변경
-    // > 이건 지금 타일 타입별로 배열로 받는 방식에서, 타일 타입별로 각자 다 받고 배열로 여러개의 모양을 받는 식으로 하면 될 듯
+    // 타일을 생성할 때, 일정 횟수 이상 실패하면 한번 뒤로 가서 다시 생성하는 기능 (만약 깊게 꼬여도 계속 반복하면 언젠가는 빠져 나오지 않을까)
     public void addTile() {
         UnityEngine.Vector3 tilePos = new UnityEngine.Vector3(nowPivot.x, nowPivot.y, transform.position.z);
 
@@ -169,9 +173,6 @@ public class TileManager : MonoBehaviour
         if (isCross == true) tileType = 3;
         else {tileType = getRandom(tileTypeAndWeight);}
         // 이거 Cross 벽에 걸려서 생성 못해도 이 변수때문에 계속 생성 못하는 상태가 되어버림... 처리 필요
-        
-        //테스트용 Cross 타일 생성
-        if (pivotList.Count == 10) tileType = 3;
 
         //HallType 중복 검사
         if (tileTypeList.Count >= 2) {
@@ -179,6 +180,25 @@ public class TileManager : MonoBehaviour
             if (tileTypeList[length - 1] == 0 && tileTypeList[length - 2] == 0) {
                 tileType = 1;       //Hall이 두번 나왔을 경우, 강제로 Corner 생성
             }
+        }
+
+        //맵 길이 처리
+        if (crossedPivotCount < 1) {
+            if (afterCrossedTileCount > mapLength * 3) {                    //맵 길이가 L3만큼 진행된 이후에만
+                if (nowCrossCount < mapComp) tileType = 3;                  //아직 갈림길 개수가 부족하니 갈림길을 하나 더 만들어줌
+                else tileType = 2;                                          //남아있는 길이 없고, 갈림길 개수도 충분하니 Room 만들고 맵을 완성
+            }
+        }
+        else {
+            if (afterCrossedTileCount > mapLength * 2) {                    //맵 길이가 L2만큼 진행된 이후에 Room 강제 생성
+                tileType = 2;
+            }
+        }
+
+        //Room 개수가 최종 개수에 도달하면 맵 생성 종료
+        if (nowCrossCount + 1 == nowRoomCount) {
+            Debug.Log("맵 생성이 성공적으로 종료되었습니다.");
+            return;
         }
 
         //생성될 Tile의 베리에이션 결정
@@ -302,11 +322,6 @@ public class TileManager : MonoBehaviour
             }
         }
         else if (tileType == 2) {
-            //최소한의 Tile 길이가 존재해야 하므로, 우선 해당 판정
-            if (pivotList.Count < minTileCount) {
-                Debug.Log("Room 타일이 생성되려고 했지만, 최소 타일 수에 도달하지 않아 return합니다");
-                return;
-            }
 
             //Room 생성
             if (prevTileDir == 2) {
@@ -327,10 +342,10 @@ public class TileManager : MonoBehaviour
                 }
 
             //생성 완료되었으면 카운트 처리
-            roomCount++;
+            nowRoomCount++;
             //Room 생성 후에는 더 이상 해당 Pivot을 트래킹 할 필요가 없으므로, crossedPivotList에서 남은 Pivot을 생성해주러 이동
             Debug.Log("이번 갈림길 Pivot의 Room이 생성되었습니다.");
-            if (crossedPivotList.Count > 1) {
+            if (crossedPivotList.Count > 0) {
                 //이렇게 처리하려면 처리 완료 시에 역순으로 빼줘야 함
                 nowPivot = crossedPivotList[crossedPivotCount - 1];
                 prevTileDir = crossedPivotPrevDirList[crossedPivotCount - 1];
@@ -338,6 +353,8 @@ public class TileManager : MonoBehaviour
                 crossedPivotList.RemoveAt(crossedPivotCount - 1);
                 crossedPivotPrevDirList.RemoveAt(crossedPivotCount - 1);
                 crossedPivotCount--;
+                //갈림길이 종료되었으므로 이후에 진행된 타일 수를 초기화
+                afterCrossedTileCount = 0;
             }
         }
         else if (tileType == 3) {
@@ -345,6 +362,7 @@ public class TileManager : MonoBehaviour
                 //방향 양 쪽 다 만들 수 있는지 먼저 체크
                 if (!checkTile(4, nowPivot) || !checkTile(6, nowPivot)) {
                     //만약 안되면 생성을 못하니까, 다음 턴에 무조건 cross를 생성하는 로직을 넣어야 함
+                    //이거 수정 필요
                     isCross = true;
                     return;
                 }
@@ -417,10 +435,15 @@ public class TileManager : MonoBehaviour
                 crossedPivotPrevDirList.Add(2);
             }
             crossedPivotCount++;
+            nowCrossCount++;
         }
         
         tileTypeList.Add(tileType); //정상적으로 추가 되었을 때만 tileTypeList에 추가
         //crossedPivot이 잘못 저장되는 케이스가 있는 것 같다.
+        
+        //타일이 생성된 후에는 이번 갈림길에서 생성된 타일 수 추가 (이번에 생성한 타일이 Hall 및 Corner일 경우에만)
+        //갈림길이 없을 때에는 핸들링하지 않고, 갈림길 종료 시에는 초기화 해주므로 별도 조건 없어도 무방해 보임
+        if (tileType < 2) afterCrossedTileCount++;
 
         Debug.Log("nowPivot: (" + nowPivot.x + ", " + nowPivot.y + ")");
         Debug.Log("nowTileType:" + tileType);
