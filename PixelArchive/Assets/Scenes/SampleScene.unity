@@ -199,24 +199,11 @@ MonoBehaviour:
   - Tile:
     - {fileID: 6082542540676448955, guid: e95f352b604c669408c12f693aeb87f6, type: 3}
     - {fileID: 6082542540676448955, guid: b662b3901d7ee8c44b50cba91cd2a53d, type: 3}
-  prevTileDir: 8
-  minTileCount: 10
-  mapLength: 1
-  mapComp: 1
-  roomCount: 0
+  mapLength: 3
+  mapComp: 3
   sameTypeTileCount: 2
   tileSize: {x: 10, y: 6}
   nowPivot: {x: 0, y: 0}
-  pivotList: []
-  randomTileType: []
-  tileObjectList: []
-  tileTypeList: 
-  crossedPivotList: []
-  crossedPivotPrevDirList: 
-  crossedPivotCount: 0
-  afterCrossedTileCount: 0
-  nowCrossCount: 0
-  isCross: 0
 --- !u!4 &36330704
 Transform:
   m_ObjectHideFlags: 0

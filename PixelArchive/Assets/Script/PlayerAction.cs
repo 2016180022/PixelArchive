@@ -93,6 +93,7 @@ public class PlayerAction : MonoBehaviour
     }
 
     void OnFire() {
+        tManager.executeTile();
         GameObject bullet = Instantiate(Bullet, transform.position, transform.rotation);
         Rigidbody2D bulletRigid = bullet.GetComponent<Rigidbody2D>();
         Vector2 mousePos = playerCamera.ScreenToWorldPoint(Input.mousePosition);
@@ -109,12 +110,16 @@ public class PlayerAction : MonoBehaviour
 
     void OnJump() {
         // Debug.Log("Jump");
-        tManager.addTile();
+        tManager.createTile();
     }
 
     void OnDash() {
         tManager.deleteAllTile();
         //타일 삭제 시 플레이어도 다시 0,0으로 보내주는 기능 추가해야 함
+    }
+
+    void OnBack() {
+        
     }
 
     void OnTriggerEnter2D(Collider2D other) {
