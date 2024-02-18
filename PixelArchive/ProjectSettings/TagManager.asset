@@ -13,6 +13,7 @@ TagManager:
   - EnemyBullet
   - Background
   - Item
+  - Bomb
   layers:
   - Default
   - TransparentFX

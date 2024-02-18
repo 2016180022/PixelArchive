@@ -10,14 +10,18 @@ public class PlayerAction : MonoBehaviour
 {
     public Vector2 inputVec;
     public float speed;
+    public float dashSpeed;
     public GameManager gManager;
     public TileManager tManager;
     public GameObject Bullet;
+    public GameObject Granade;
 
     //skill variable
     public GameObject playerShield;
-    public bool isActiveShield = false;
-    float shieldActiveTime;
+    private bool isActiveShield = false;
+    private float shieldActiveTime;
+    private bool isActiveDash = false;
+    private float dashActiveTime;
     public int[] skillSlot;
     
     Rigidbody2D rigid;
@@ -64,9 +68,20 @@ public class PlayerAction : MonoBehaviour
         if (rayHit.collider != null) scanObj = rayHit.collider.gameObject;
         else scanObj = null;
         */
-        Vector2 moveVector = inputVec.normalized * speed * Time.fixedDeltaTime;
-        rigid.MovePosition(rigid.position + moveVector);
-        
+
+        if (isActiveDash) {
+            Vector2 moveVector = inputVec.normalized * dashSpeed * Time.fixedDeltaTime;
+            rigid.MovePosition(rigid.position + moveVector);
+            dashActiveTime += Time.fixedDeltaTime;
+            if (dashActiveTime >= 0.3) {
+                isActiveDash = false;
+            }
+        }
+        else {
+            Vector2 moveVector = inputVec.normalized * speed * Time.fixedDeltaTime;
+            rigid.MovePosition(rigid.position + moveVector);
+        }
+    
         if (isActiveShield) {
             shieldActiveTime += Time.fixedDeltaTime;
             playerShield.transform.position = rigid.transform.position;
@@ -76,10 +91,10 @@ public class PlayerAction : MonoBehaviour
                 isActiveShield = false;
             }
         }
+
     }
 
     void LateUpdate() {
-
         anim.SetFloat("Speed", inputVec.magnitude);
 
         if (inputVec.x != 0) {
@@ -93,7 +108,6 @@ public class PlayerAction : MonoBehaviour
     }
 
     void OnFire() {
-        tManager.executeTile();
         GameObject bullet = Instantiate(Bullet, transform.position, transform.rotation);
         Rigidbody2D bulletRigid = bullet.GetComponent<Rigidbody2D>();
         Vector2 mousePos = playerCamera.ScreenToWorldPoint(Input.mousePosition);
@@ -114,12 +128,12 @@ public class PlayerAction : MonoBehaviour
     }
 
     void OnDash() {
-        tManager.deleteAllTile();
-        //타일 삭제 시 플레이어도 다시 0,0으로 보내주는 기능 추가해야 함
+        tManager.executeTile();
     }
 
     void OnBack() {
-        
+        tManager.deleteAllTile();
+        //타일 삭제 시 Player 0,0으로 돌아가는 기능 추가 필요
     }
 
     void OnTriggerEnter2D(Collider2D other) {
@@ -157,8 +171,10 @@ public class PlayerAction : MonoBehaviour
     }
 
     void useSkill(int skillIndex) {
-        if (skillIndex == 1) {skillFiveShot();}
-        else if (skillIndex == 2) {skillShield();}
+        if (skillIndex == 3) {skillFiveShot();}
+        // else if (skillIndex == 2) {skillShield();}
+        else if (skillIndex == 1) skillGranade();
+        else if (skillIndex == 2) skillDash();
     }
 
     void skillFiveShot() {
@@ -174,6 +190,32 @@ public class PlayerAction : MonoBehaviour
             isActiveShield = true;
             playerShield.SetActive(true);
             shieldActiveTime = 0;
+        }
+    }
+
+    void skillGranade() {
+        //Granade 프리팹 생성(Collider 없는 리소스)
+        //Granade에 물리값까지 넣어주고 끝
+        GameObject granade = Instantiate(Granade, transform.position, transform.rotation);
+        Rigidbody2D granadeRigid = granade.GetComponent<Rigidbody2D>();
+        Bullet bGranade = granade.GetComponent<Bullet>();
+        Vector2 mousePos = playerCamera.ScreenToWorldPoint(Input.mousePosition);
+        Vector2 granadeDir;
+        granadeDir.x = mousePos.x - rigid.position.x;
+        granadeDir.y = mousePos.y - rigid.position.y;
+
+        float angle = Mathf.Atan2(mousePos.y - granade.transform.position.y, mousePos.x - granade.transform.position.x) * Mathf.Rad2Deg;
+        granade.transform.rotation = Quaternion.AngleAxis(angle - 90, Vector3.forward);
+        // Debug.Log(angle);
+
+        granadeRigid.AddForce(granadeDir.normalized * 5, ForceMode2D.Impulse);
+        bGranade.getTargetPos(mousePos);
+    }
+
+    void skillDash() {
+        if (!isActiveDash) {
+            isActiveDash = true;
+            dashActiveTime = 0;
         }
     }
 

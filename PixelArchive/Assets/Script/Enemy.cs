@@ -88,14 +88,14 @@ public class Enemy : MonoBehaviour
     }
 
     private void OnTriggerEnter2D(Collider2D other) {
-        if (!other.CompareTag("Bullet")) return;
-
-        health -= other.GetComponent<Bullet>().damage;
-        if (health > 0) {
-            //Live
-        }
-        else {
-            Dead();
+        if (other.CompareTag("Bullet") || other.CompareTag("Bomb")) {
+            health -= other.GetComponent<Bullet>().damage;
+            if (health > 0) {
+                //Live
+            }
+            else {
+                Dead();
+            }
         }
     }
 
