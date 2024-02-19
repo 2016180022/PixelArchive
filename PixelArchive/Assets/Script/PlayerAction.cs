@@ -8,11 +8,16 @@ using UnityEngine.InputSystem;
 
 public class PlayerAction : MonoBehaviour
 {
+    public static PlayerAction player;
+
+    public int coin = 0;
+    public int health = 1;
+    public int maxHealth = 3;
+    
     public Vector2 inputVec;
     public float speed;
     public float dashSpeed;
-    public GameManager gManager;
-    public TileManager tManager;
+    // public TileManager tManager;
     public GameObject Bullet;
     public GameObject Granade;
 
@@ -27,7 +32,6 @@ public class PlayerAction : MonoBehaviour
     Rigidbody2D rigid;
     SpriteRenderer spriter;
     Animator anim;
-    GameObject scanObj;
     Camera playerCamera;
     
     void Awake() {
@@ -41,8 +45,6 @@ public class PlayerAction : MonoBehaviour
     void Update() {
         //scanObj 검사
         // if (Input.GetButtonDown("Jump") && scanObj != null) gManager.setText(scanObj);
-
-        if (gManager.isDialogActive) return;
 
         /*
         //방향 레이 동기화
@@ -124,15 +126,15 @@ public class PlayerAction : MonoBehaviour
 
     void OnJump() {
         // Debug.Log("Jump");
-        tManager.createTile();
+        TileManager.tManager.createTile();
     }
 
     void OnDash() {
-        tManager.executeTile();
+        TileManager.tManager.executeTile();
     }
 
     void OnBack() {
-        tManager.deleteAllTile();
+        TileManager.tManager.deleteAllTile();
         //타일 삭제 시 Player 0,0으로 돌아가는 기능 추가 필요
     }
 
@@ -141,13 +143,19 @@ public class PlayerAction : MonoBehaviour
             Item item = other.GetComponent<Item>();
             switch(item.type) {
                 case Item.itemType.Coin:
-                Debug.Log("Coin " + item.value + "개 획득!");
+                if (coin > 999) coin = 999;
+                else {
+                    coin += item.value;
+                }
+                // Debug.Log("Coin " + item.value + "개 획득!");
                 break;
+
                 case Item.itemType.Heart:
-                Debug.Log("Hp " + item.value + "회복!");
+                if (health < maxHealth) health++;
+                // Debug.Log("Hp " + item.value + "회복!");
                 break;
+
                 case Item.itemType.Skill:
-                // Debug.Log("스킬은 아직 미구현입니다 ㅜ");
                 getSkill(item.value);
                 break;
             }
@@ -156,8 +164,10 @@ public class PlayerAction : MonoBehaviour
         //Bullet.cs에서 처리해주던 충돌 처리를 Player로 이관
         else if (other.tag == "EnemyBullet") {
             //피격 처리
-            Debug.Log("피격");
+            // Debug.Log("피격");
             Destroy(other.gameObject);
+            if (health > 0) health--;
+            //체력 0일 때 종료처리 필요
         }
     }
 

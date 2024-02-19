@@ -14,7 +14,9 @@ public class TileList {
 
 public class TileManager : MonoBehaviour
 {
-    //Obj[dirType][List]    >2차원 배열은 Inspector 이슈로 보류
+    public static TileManager tManager;
+
+    //Obj[dirType][List]
     public TileList[] hallTile;
     public TileList[] cornerTile;
     public TileList[] roomTile;
