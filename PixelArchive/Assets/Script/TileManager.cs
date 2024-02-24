@@ -14,7 +14,7 @@ public class TileList {
 
 public class TileManager : MonoBehaviour
 {
-    public static TileManager tManager;
+    // public static TileManager tManager;
 
     //Obj[dirType][List]
     public TileList[] hallTile;
@@ -42,7 +42,7 @@ public class TileManager : MonoBehaviour
     private int nowCrossCount;                                                   //현재 갈림길의 개수
     private int nowRoomCount;                                                    //현재 Room의 개수
     private int failCount;                                                       //타일 생성에 실패한 스택 수
-    private bool isEndMapCreate;                                                 //While 루프 쓰기엔 조금 무서워서 변수는 남겨둠
+    private bool isEndMapCreate = false;                                                 //맵 생성 완료되기 전에 Execute하는 상황 방지용
 
     private Dictionary<String, int> tileTypeAndWeight = new Dictionary<string, int>();    //tileType과 가중치
 
@@ -179,6 +179,11 @@ public class TileManager : MonoBehaviour
 
     public void executeTile() {
         Debug.Log("타일 출력 시작");
+
+        if (!isEndMapCreate) {
+            Debug.Log("맵 생성이 완료되지 않아 Execute할 수 없습니다");
+            return;
+        }
 
         for (int i = 0; i < pivotList.Count; i++) {
             //순번대로 저장한 정보 불러오기

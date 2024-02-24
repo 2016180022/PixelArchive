@@ -17,7 +17,8 @@ public class PlayerAction : MonoBehaviour
     public Vector2 inputVec;
     public float speed;
     public float dashSpeed;
-    // public TileManager tManager;
+    //객체 생성해서 자동으로 할당해주는 방식 안되는 경우가 있어서, 별도로 넣어주기로 함
+    public TileManager tManager;
     public GameObject Bullet;
     public GameObject Granade;
 
@@ -126,15 +127,15 @@ public class PlayerAction : MonoBehaviour
 
     void OnJump() {
         // Debug.Log("Jump");
-        TileManager.tManager.createTile();
+        tManager.createTile();
     }
 
     void OnDash() {
-        TileManager.tManager.executeTile();
+        tManager.executeTile();
     }
 
     void OnBack() {
-        TileManager.tManager.deleteAllTile();
+        tManager.deleteAllTile();
         //타일 삭제 시 Player 0,0으로 돌아가는 기능 추가 필요
     }
 
@@ -175,16 +176,16 @@ public class PlayerAction : MonoBehaviour
         if (skillSlot[0] == 0) skillSlot[0] = skillIndex;
         else if (skillSlot[1] == 0) skillSlot[1] = skillIndex;
         else if (skillSlot[2] == 0) skillSlot[2] = skillIndex;
-        Debug.Log("1번 슬롯: " + skillSlot[0]);
-        Debug.Log("2번 슬롯: " + skillSlot[1]);
-        Debug.Log("3번 슬롯: " + skillSlot[2]);
+        // Debug.Log("1번 슬롯: " + skillSlot[0]);
+        // Debug.Log("2번 슬롯: " + skillSlot[1]);
+        // Debug.Log("3번 슬롯: " + skillSlot[2]);
     }
 
     void useSkill(int skillIndex) {
-        if (skillIndex == 3) {skillFiveShot();}
-        // else if (skillIndex == 2) {skillShield();}
-        else if (skillIndex == 1) skillGranade();
-        else if (skillIndex == 2) skillDash();
+        if (skillIndex == 1) {skillFiveShot();}
+        else if (skillIndex == 2) {skillShield();}
+        else if (skillIndex == 3) skillGranade();
+        else if (skillIndex == 4) skillDash();
     }
 
     void skillFiveShot() {

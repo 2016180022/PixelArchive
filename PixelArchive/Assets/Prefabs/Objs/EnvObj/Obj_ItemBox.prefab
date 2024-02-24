@@ -186,15 +186,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: 0
   isNpc: 0
-  isDropable: 0
+  isDropable: 1
   Coin:
   - {fileID: 4143762569739754006, guid: 86e5b433a3c5cc24b9614d3024e54c7c, type: 3}
   - {fileID: 4143762569739754006, guid: 8dfdaca3abbb66a4f84a489223f7cf17, type: 3}
   - {fileID: 4143762569739754006, guid: cb690f8dcf42fc548abc7f7df2c9a321, type: 3}
   Heart: {fileID: 3022828181020512649, guid: 26c916d44c4331b4dba8de05d2e11268, type: 3}
-  Skill:
-  - {fileID: 239869052121874521, guid: 6e500dcdd2a73eb46851d9a0f8fdffab, type: 3}
-  - {fileID: 239869052121874521, guid: 9ac923c1f942f5942b770669b6577012, type: 3}
+  Skill: {fileID: 239869052121874521, guid: 6e500dcdd2a73eb46851d9a0f8fdffab, type: 3}
 --- !u!50 &8401042178852312520
 Rigidbody2D:
   serializedVersion: 4
