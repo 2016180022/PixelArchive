@@ -120,6 +120,8 @@ public class PlayerAction : MonoBehaviour
     }
 
     void OnFire() {
+        if (!gManager.isLive) return;
+        
         GameObject bullet = Instantiate(Bullet, transform.position, transform.rotation);
         Rigidbody2D bulletRigid = bullet.GetComponent<Rigidbody2D>();
         Vector2 mousePos = playerCamera.ScreenToWorldPoint(Input.mousePosition);
@@ -182,7 +184,7 @@ public class PlayerAction : MonoBehaviour
             //피격 처리
             // Debug.Log("피격");
             Destroy(other.gameObject);
-            if (health > 0) health--;
+            if (health > 1) health--;
             //체력 0일 때 종료처리 필요
         }
     }

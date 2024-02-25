@@ -15,7 +15,7 @@ public class Item : MonoBehaviour
     void Start() {
         itemPos = transform.position;
         if (type == itemType.Skill) {
-            value = Random.Range(1, 4);
+            value = Random.Range(0, 3) + 1;
         }
     }
     void Update() {
