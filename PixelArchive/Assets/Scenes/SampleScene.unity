@@ -2411,6 +2411,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   target: {fileID: 1415921076}
+  pPlayer: {fileID: 1415921073}
 --- !u!1 &597394095
 GameObject:
   m_ObjectHideFlags: 0
@@ -3173,9 +3174,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a755bd9fb5eea6849962ab922abf5193, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  pPlayer: {fileID: 0}
+  pPlayer: {fileID: 1415921073}
   cManager: {fileID: 1234509892}
   tManager: {fileID: 36330703}
+  isLive: 0
 --- !u!4 &919535442
 Transform:
   m_ObjectHideFlags: 0
@@ -4059,6 +4061,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fee9a8dcc76842d46927bd2c1c31d276, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  gManager: {fileID: 919535441}
 --- !u!114 &1234509893
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5829,6 +5832,8 @@ MonoBehaviour:
   Granade: {fileID: 1034882062955220231, guid: f274a3e1c52680a4d885da2245a95b4a, type: 3}
   playerShield: {fileID: 194822059}
   skillSlot: 000000000000000000000000
+  isCameraMode: 0
+  pCameraController: {fileID: 519420034}
 --- !u!212 &1415921074
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -6480,7 +6485,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1584971948
 Transform:
   m_ObjectHideFlags: 0

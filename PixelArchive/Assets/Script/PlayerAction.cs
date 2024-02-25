@@ -29,6 +29,10 @@ public class PlayerAction : MonoBehaviour
     private bool isActiveDash = false;
     private float dashActiveTime;
     public int[] skillSlot;
+
+    public bool isCameraMode;
+
+    public CameraController pCameraController;
     
     Rigidbody2D rigid;
     SpriteRenderer spriter;
@@ -73,7 +77,8 @@ public class PlayerAction : MonoBehaviour
         if (rayHit.collider != null) scanObj = rayHit.collider.gameObject;
         else scanObj = null;
         */
-
+        if (!gManager.isLive) return;
+        if (isCameraMode) return;
         if (isActiveDash) {
             Vector2 moveVector = inputVec.normalized * dashSpeed * Time.fixedDeltaTime;
             rigid.MovePosition(rigid.position + moveVector);
@@ -100,6 +105,8 @@ public class PlayerAction : MonoBehaviour
     }
 
     void LateUpdate() {
+        if (!gManager.isLive) return;
+        if (isCameraMode) return;
         anim.SetFloat("Speed", inputVec.magnitude);
 
         if (inputVec.x != 0) {
@@ -128,17 +135,23 @@ public class PlayerAction : MonoBehaviour
     }
 
     void OnJump() {
-        // Debug.Log("Jump");
-        resetPosition();
+        if (!isCameraMode) {
+            isCameraMode = true;
+            Debug.Log("카메라 모드 활성화");
+        }
+        
+        else {
+            isCameraMode = false;
+            Debug.Log("카메라 모드 비활성화");
+        }
     }
 
     void OnDash() {
-        tManager.executeTile();
+
     }
 
     void OnBack() {
-        tManager.deleteAllTile();
-        //타일 삭제 시 Player 0,0으로 돌아가는 기능 추가 필요
+
     }
 
     void OnTriggerEnter2D(Collider2D other) {

@@ -13,7 +13,6 @@ public class Enemy : MonoBehaviour
     public float maxShotDelay;
     public GameObject Bullet;
 
-    bool isLive = true;
     Rigidbody2D rigidB;
     Rigidbody2D target;
     SpriteRenderer spriteR;
@@ -23,11 +22,10 @@ public class Enemy : MonoBehaviour
         rigidB = GetComponent<Rigidbody2D>();
         spriteR = GetComponent<SpriteRenderer>();
         target = PlayerAction.playerInstance.GetComponent<Rigidbody2D>();
-        
     }
 
     void FixedUpdate() {
-        if (!isLive) return;
+        if (!GameManager.instance.isLive) return;
 
         float targetDis = Vector2.Distance(target.position, rigidB.position);
 
@@ -46,7 +44,7 @@ public class Enemy : MonoBehaviour
     }
 
     void LateUpdate() {
-         if (!isLive) return;
+         if (!GameManager.instance.isLive) return;
 
          spriteR.flipX = target.position.x < rigidB.position.x;
     }

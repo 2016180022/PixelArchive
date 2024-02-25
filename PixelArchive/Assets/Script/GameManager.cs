@@ -15,8 +15,11 @@ public class GameManager : MonoBehaviour
     public ConfigManager cManager;
     public TileManager tManager;
 
+    public bool isLive;
+
     private void Awake() {
         instance = this;
+        isLive = true;
     }
 
     public void callConfigUI() {
@@ -35,6 +38,16 @@ public class GameManager : MonoBehaviour
         if (!tManager.isEndMapCreate) return;
 
         tManager.deleteAllTile();
-        // pPlayer.resetPosition();
+        pPlayer.resetPosition();
+    }
+
+    public void pauseGame() {
+        isLive = false;
+        Time.timeScale = 0;
+    }
+
+    public void resumeGame() {
+        isLive = true;
+        Time.timeScale = 1;
     }
 }

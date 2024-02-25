@@ -30,6 +30,7 @@ public class Bullet : MonoBehaviour
     }
 
     void FixedUpdate() {
+        if (!GameManager.instance.isLive) return;
         if (bombCreate == true) {
             checkBomb(targetPos);
             bombTimeLimit += Time.deltaTime;
