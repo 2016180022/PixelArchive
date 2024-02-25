@@ -22,10 +22,8 @@ public class Enemy : MonoBehaviour
     {
         rigidB = GetComponent<Rigidbody2D>();
         spriteR = GetComponent<SpriteRenderer>();
-    }
-
-    private void Start() {
-        target = GameManager.instance.player.GetComponent<Rigidbody2D>();
+        target = PlayerAction.playerInstance.GetComponent<Rigidbody2D>();
+        
     }
 
     void FixedUpdate() {

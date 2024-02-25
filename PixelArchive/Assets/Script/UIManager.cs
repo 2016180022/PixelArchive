@@ -7,13 +7,15 @@ using UnityEngine.UI;
 
 public class UIManager : MonoBehaviour
 {
-    public enum InfoType {Health, Coin, Skill}
+    public enum InfoType {Health, Coin, Skill, Slider}
     public InfoType type;
     //Instance 불러오기 작동하지 않으므로, 직접 넣어주는 방식으로 구현
     public PlayerAction pplayer;
+    public TileManager tManager;
     public int slotIndex;
     Text childText;
     Image[] childImages;
+    Slider childSlider;
 
     void Awake() {
         switch (type) {
@@ -27,6 +29,10 @@ public class UIManager : MonoBehaviour
 
             case InfoType.Skill:
                 childImages = GetComponentsInChildren<Image>();
+            break;
+
+            case InfoType.Slider:
+                childSlider = GetComponentInChildren<Slider>();
             break;
         }
     }
@@ -72,5 +78,13 @@ public class UIManager : MonoBehaviour
                 }
             break;
         }
+    }
+
+    public void setLength() {
+        tManager.setLength(childSlider.value);
+    }
+
+    public void setComp() {
+        tManager.setComplexity(childSlider.value);
     }
 }

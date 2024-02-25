@@ -42,7 +42,7 @@ public class TileManager : MonoBehaviour
     private int nowCrossCount;                                                   //현재 갈림길의 개수
     private int nowRoomCount;                                                    //현재 Room의 개수
     private int failCount;                                                       //타일 생성에 실패한 스택 수
-    private bool isEndMapCreate = false;                                                 //맵 생성 완료되기 전에 Execute하는 상황 방지용
+    public bool isEndMapCreate = false;                                          //맵 생성 완료되기 전에 Execute하는 상황 방지용
 
     private Dictionary<String, int> tileTypeAndWeight = new Dictionary<string, int>();    //tileType과 가중치
 
@@ -160,6 +160,7 @@ public class TileManager : MonoBehaviour
         foreach(GameObject tile in tileObjectList) {
             Destroy(tile);
         }
+        Debug.Log("오브젝트 프리팹 제거 완료");
 
         //Pivot 정보도 모두 초기화해줘야 함
         prevTileDir = 8;
@@ -170,11 +171,19 @@ public class TileManager : MonoBehaviour
 
         nowPivot = new Vector2Int(0,12);
 
+        Debug.Log("타일 데이터 변수 정리 완료");
+
         pivotList.Clear();
         tileObjectList.Clear();
         tileTypeList.Clear();
         crossedPivotList.Clear();
         crossedPivotPrevDirList.Clear();
+        tileDirAndIndexList.Clear();
+        prevTileDirList.Clear();
+
+        Debug.Log("타일 데이터 리스트 정리 완료");
+
+        isEndMapCreate = false;
     }
 
     public void executeTile() {
@@ -537,4 +546,13 @@ public class TileManager : MonoBehaviour
         // Debug.Log(pivotList[pivotList.Count - 1].x + ", " + pivotList[pivotList.Count - 1].y);
     }
 
+    public void setLength(float value) {
+        mapLength = (int)(value);
+        Debug.Log("맵 길이가 " + mapLength + "로 변경되었습니다.");
+    }
+
+    public void setComplexity(float value) {
+        mapComp = (int)(value);
+        Debug.Log("맵 복잡도가 " + mapComp + "로 변경되었습니다.");
+    }
 }

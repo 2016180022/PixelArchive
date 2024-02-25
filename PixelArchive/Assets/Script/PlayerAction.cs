@@ -8,8 +8,7 @@ using UnityEngine.InputSystem;
 
 public class PlayerAction : MonoBehaviour
 {
-    public static PlayerAction player;
-
+    public static PlayerAction playerInstance;
     public int coin = 0;
     public int health = 1;
     public int maxHealth = 3;
@@ -19,6 +18,7 @@ public class PlayerAction : MonoBehaviour
     public float dashSpeed;
     //객체 생성해서 자동으로 할당해주는 방식 안되는 경우가 있어서, 별도로 넣어주기로 함
     public TileManager tManager;
+    public GameManager gManager;
     public GameObject Bullet;
     public GameObject Granade;
 
@@ -40,6 +40,8 @@ public class PlayerAction : MonoBehaviour
         spriter = GetComponent<SpriteRenderer>();
         anim = GetComponent<Animator>();
         playerCamera = GameObject.Find("Main Camera").GetComponent<Camera>();
+
+        playerInstance = this;
     }
 
     // Update is called once per frame
@@ -127,7 +129,7 @@ public class PlayerAction : MonoBehaviour
 
     void OnJump() {
         // Debug.Log("Jump");
-        tManager.createTile();
+        resetPosition();
     }
 
     void OnDash() {
@@ -246,5 +248,14 @@ public class PlayerAction : MonoBehaviour
         if (skillSlot[2] == 0) return;
         useSkill(skillSlot[2]);
         skillSlot[2] = 0;
+    }
+
+    void OnEscape() {
+        gManager.callConfigUI();
+    }
+
+    public void resetPosition() {
+        Debug.Log("플레이어 위치 리셋");
+        transform.position = new Vector3(10, 6, 0);
     }
 }
