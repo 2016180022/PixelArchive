@@ -184,10 +184,10 @@ public class PlayerAction : MonoBehaviour
     }
 
     void useSkill(int skillIndex) {
-        if (skillIndex == 1) {skillFiveShot();}
-        else if (skillIndex == 2) {skillShield();}
-        else if (skillIndex == 3) skillGranade();
-        else if (skillIndex == 4) skillDash();
+        if (skillIndex == 1) skillFiveShot();
+        else if (skillIndex == 2) skillShield();
+        // else if (skillIndex == 3) skillGranade();
+        else if (skillIndex == 3) skillDash();
     }
 
     void skillFiveShot() {
